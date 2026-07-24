@@ -1,0 +1,14 @@
+*.js
+!jest.config.js
+*.d.ts
+node_modules
+.cdk.staging
+cdk.out
+dist
+
+# .NET (Lambda, tests, herramientas de línea de comandos)
+bin/
+obj/
+
+# Archivos temporales usados en pruebas manuales de integración (ver README)
+.tmp-*

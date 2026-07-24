@@ -1,0 +1,32 @@
+.leaderboard-page {
+  max-width: 480px;
+  margin: 3rem auto;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+
+  th,
+  td {
+    padding: 0.5rem;
+    border-bottom: 1px solid #333;
+  }
+}
+
+.back-link {
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.error {
+  color: #e53e3e;
+}
+
+.loading,
+.empty {
+  color: #888;
+}

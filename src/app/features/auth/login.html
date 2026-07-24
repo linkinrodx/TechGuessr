@@ -1,0 +1,28 @@
+<main class="auth-page">
+  <h1>TechGuessr</h1>
+  <p class="subtitle">Iniciar sesión</p>
+
+  <form (ngSubmit)="onSubmit()" class="auth-form">
+    <label>
+      Usuario
+      <input type="text" name="username" [(ngModel)]="username" required autocomplete="username" />
+    </label>
+
+    <label>
+      Contraseña
+      <input type="password" name="password" [(ngModel)]="password" required autocomplete="current-password" />
+    </label>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <button type="submit" [disabled]="isSubmitting()">
+      {{ isSubmitting() ? 'Ingresando...' : 'Ingresar' }}
+    </button>
+  </form>
+
+  <p class="switch-link">
+    ¿No tienes cuenta? <a routerLink="/register">Regístrate</a>
+  </p>
+</main>

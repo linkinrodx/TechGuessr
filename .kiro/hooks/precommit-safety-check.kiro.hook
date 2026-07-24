@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Revisión de seguridad antes de commit",
+  "description": "Antes de ejecutar un comando de shell que incluya \"git commit\", revisa el diff en staging en busca de secretos evidentes (AWS keys, llaves privadas, tokens), archivos que no deberían commitearse (.env real, node_modules, bin/obj de .NET, cdk.out) y archivos anómalamente grandes.",
+  "version": "1",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": [
+      "shell"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Estás a punto de ejecutar un comando de shell. Si el comando incluye \"git commit\" (en cualquier forma, incluyendo mensajes multilínea), DETENTE antes de dejarlo correr y haz lo siguiente:\n\n1. Corre `git diff --cached` (o `git diff --cached --stat` primero si el diff es muy largo) sobre el repo correspondiente para ver exactamente qué se va a commitear.\n2. Revisa el contenido en busca de:\n   - Secretos evidentes: patrones tipo AWS Access Key (AKIA[A-Z0-9]{16}), Secret Access Key, bloques \"BEGIN PRIVATE KEY\"/\"BEGIN RSA PRIVATE KEY\", tokens JWT completos, contraseñas en texto plano en archivos de configuración.\n   - Archivos que nunca deberían commitearse: .env real (no .env.example), node_modules/, bin/ y obj/ de .NET, cdk.out/, dist/, archivos .tmp-* de pruebas manuales.\n   - Archivos anómalamente grandes (varios MB) que sugieran un build/artefacto colado por error.\n3. Si encuentras algo de lo anterior:\n   - NO dejes que el commit se ejecute.\n   - Explica al usuario exactamente qué archivo y qué patrón encontraste.\n   - Sugiere la corrección (agregar a .gitignore, hacer `git reset <archivo>` para sacarlo del staging, o remover el secreto del contenido).\n4. Si no encuentras nada de lo anterior, deja que el comando de commit proceda con normalidad, sin comentarios adicionales.\n\nSi el comando de shell no incluye \"git commit\", no hagas nada especial, deja que proceda con normalidad sin analizarlo."
+  }
+}

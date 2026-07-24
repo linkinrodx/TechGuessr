@@ -1,0 +1,22 @@
+{
+  "name": "techguessr-infra",
+  "version": "0.0.0",
+  "private": true,
+  "bin": {
+    "infra": "bin/app.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/node": "26.1.1",
+    "aws-cdk": "2.1133.0",
+    "typescript": "6.0.2"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.262.0",
+    "constructs": "10.7.1"
+  }
+}

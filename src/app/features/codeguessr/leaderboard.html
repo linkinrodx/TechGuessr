@@ -1,0 +1,32 @@
+<main class="leaderboard-page">
+  <h1>Tabla de mejores puntajes</h1>
+
+  @if (isLoading()) {
+    <p class="loading">Cargando...</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (entries().length === 0) {
+    <p class="empty">Todavía no hay partidas completadas. ¡Sé el primero!</p>
+  } @else {
+    <table class="leaderboard-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Jugador</th>
+          <th>Puntaje</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (entry of entries(); track entry.Username + entry.AchievedAt; let i = $index) {
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ entry.Username }}</td>
+            <td>{{ entry.TotalScore }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <a routerLink="/play" class="back-link">Jugar</a>
+</main>

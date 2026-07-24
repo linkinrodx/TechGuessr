@@ -1,0 +1,146 @@
+[
+  {
+    "snippetId": "snip-001",
+    "code": "@Component({\n  selector: 'app-counter',\n  template: `<button (click)=\"increment()\">{{ count() }}</button>`\n})\nexport class CounterComponent {\n  count = signal(0);\n  increment() {\n    this.count.update(v => v + 1);\n  }\n}",
+    "language": "TypeScript",
+    "framework": "Angular",
+    "project": "Angular",
+    "difficulty": "easy",
+    "explanation": "El decorador @Component y el uso de signal()/update() son característicos de Angular moderno (v17+), que reemplazó gran parte del uso de RxJS para estado simple de componente."
+  },
+  {
+    "snippetId": "snip-002",
+    "code": "function mountHookState(initialState) {\n  const hook = createWorkInProgressHook();\n  if (typeof initialState === 'function') {\n    initialState = initialState();\n  }\n  hook.memoizedState = hook.baseState = initialState;\n  return hook.memoizedState;\n}",
+    "language": "JavaScript",
+    "framework": "React",
+    "project": "React",
+    "difficulty": "hard",
+    "explanation": "Esta función recrea el patrón interno que React usa para inicializar el estado de un Hook (similar a mountState en el código fuente de React). No es código de una app que usa React, sino del propio motor de reconciliación."
+  },
+  {
+    "snippetId": "snip-003",
+    "code": "class Article(models.Model):\n    title = models.CharField(max_length=200)\n    published_at = models.DateTimeField(auto_now_add=True)\n\n    def __str__(self):\n        return self.title",
+    "language": "Python",
+    "framework": "Django",
+    "project": "Django",
+    "difficulty": "easy",
+    "explanation": "models.Model, CharField y DateTimeField son parte del ORM de Django. Esta forma declarativa de modelar tablas de base de datos es una de las señas de identidad más reconocibles del framework."
+  },
+  {
+    "snippetId": "snip-004",
+    "code": "@app.route('/health', methods=['GET'])\ndef health_check():\n    return jsonify(status='ok'), 200\n\nif __name__ == '__main__':\n    app.run(debug=True)",
+    "language": "Python",
+    "framework": "Flask",
+    "project": null,
+    "difficulty": "easy",
+    "explanation": "El decorador @app.route y jsonify son de Flask, un microframework minimalista de Python. En este caso no se puede identificar un proyecto específico porque es un patrón de arranque muy genérico, común a miles de apps distintas."
+  },
+  {
+    "snippetId": "snip-005",
+    "code": "@RestController\n@RequestMapping(\"/api/orders\")\npublic class OrderController {\n\n    @Autowired\n    private OrderService orderService;\n\n    @GetMapping(\"/{id}\")\n    public ResponseEntity<Order> getOrder(@PathVariable Long id) {\n        return ResponseEntity.ok(orderService.findById(id));\n    }\n}",
+    "language": "Java",
+    "framework": "Spring",
+    "project": "Spring Framework",
+    "difficulty": "medium",
+    "explanation": "Las anotaciones @RestController, @RequestMapping y @Autowired son parte del sistema de inyección de dependencias y enrutamiento HTTP de Spring, uno de los frameworks Java empresariales más usados."
+  },
+  {
+    "snippetId": "snip-006",
+    "code": "func handler(w http.ResponseWriter, r *http.Request) {\n\tdefer r.Body.Close()\n\tw.Header().Set(\"Content-Type\", \"application/json\")\n\tw.WriteHeader(http.StatusOK)\n}\n\nfunc main() {\n\thttp.HandleFunc(\"/ping\", handler)\n\thttp.ListenAndServe(\":8080\", nil)\n}",
+    "language": "Go",
+    "framework": null,
+    "project": null,
+    "difficulty": "easy",
+    "explanation": "Este snippet usa exclusivamente el paquete net/http de la librería estándar de Go, sin ningún framework web de terceros (como Gin o Echo). El uso de defer y punteros (*http.Request) es idiomático de Go."
+  },
+  {
+    "snippetId": "snip-007",
+    "code": "fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {\n    if x.len() > y.len() {\n        x\n    } else {\n        y\n    }\n}",
+    "language": "Rust",
+    "framework": null,
+    "project": null,
+    "difficulty": "hard",
+    "explanation": "Las lifetimes explícitas ('a) son un concepto exclusivo de Rust, necesario para que el borrow checker garantice que las referencias devueltas no sobrevivan a los datos que apuntan."
+  },
+  {
+    "snippetId": "snip-008",
+    "code": "[ApiController]\n[Route(\"api/[controller]\")]\npublic class ProductsController : ControllerBase\n{\n    [HttpGet(\"{id:int}\")]\n    public IActionResult GetById(int id)\n    {\n        var product = _repository.Find(id);\n        return product is null ? NotFound() : Ok(product);\n    }\n}",
+    "language": "C#",
+    "framework": "ASP.NET Core",
+    "project": "ASP.NET Core",
+    "difficulty": "medium",
+    "explanation": "Los atributos [ApiController] y [Route], junto con ControllerBase y IActionResult, son parte del patrón MVC/Web API de ASP.NET Core."
+  },
+  {
+    "snippetId": "snip-009",
+    "code": "class Order < ApplicationRecord\n  belongs_to :customer\n  has_many :line_items, dependent: :destroy\n\n  validates :total, numericality: { greater_than: 0 }\nend",
+    "language": "Ruby",
+    "framework": "Ruby on Rails",
+    "project": "Ruby on Rails",
+    "difficulty": "medium",
+    "explanation": "belongs_to, has_many y validates son parte de Active Record, el ORM de Rails. La convención sobre configuración (convention over configuration) es la filosofía central de este framework."
+  },
+  {
+    "snippetId": "snip-010",
+    "code": "Route::get('/dashboard', function () {\n    return view('dashboard');\n})->middleware(['auth', 'verified']);",
+    "language": "PHP",
+    "framework": "Laravel",
+    "project": null,
+    "difficulty": "easy",
+    "explanation": "La sintaxis fluida Route::get(...)->middleware([...]) con closures es característica del enrutador de Laravel. No se identifica un proyecto concreto porque es un patrón de ruta genérico."
+  },
+  {
+    "snippetId": "snip-011",
+    "code": "<script setup>\nimport { ref, computed } from 'vue';\n\nconst price = ref(100);\nconst quantity = ref(2);\nconst total = computed(() => price.value * quantity.value);\n</script>",
+    "language": "JavaScript",
+    "framework": "Vue",
+    "project": "Vue.js",
+    "difficulty": "medium",
+    "explanation": "El bloque <script setup> junto con ref() y computed() son parte de la Composition API introducida en Vue 3, reemplazando gradualmente a la Options API de Vue 2."
+  },
+  {
+    "snippetId": "snip-012",
+    "code": "struct ContentView: View {\n    @State private var isOn = false\n\n    var body: some View {\n        Toggle(\"Modo oscuro\", isOn: $isOn)\n            .padding()\n    }\n}",
+    "language": "Swift",
+    "framework": "SwiftUI",
+    "project": "SwiftUI",
+    "difficulty": "hard",
+    "explanation": "El wrapper @State y el uso de $isOn (binding) para sincronizar estado con una vista declarativa son exclusivos de SwiftUI, el framework declarativo de UI de Apple."
+  },
+  {
+    "snippetId": "snip-013",
+    "code": "suspend fun fetchUser(id: String): User = withContext(Dispatchers.IO) {\n    api.getUser(id)\n}\n\nviewModelScope.launch {\n    val user = fetchUser(\"42\")\n    _uiState.value = UiState.Loaded(user)\n}",
+    "language": "Kotlin",
+    "framework": null,
+    "project": null,
+    "difficulty": "hard",
+    "explanation": "suspend fun, withContext y launch son parte de las coroutines de Kotlin, el mecanismo estándar de concurrencia asíncrona del lenguaje, independiente de cualquier framework de UI específico."
+  },
+  {
+    "snippetId": "snip-014",
+    "code": "SELECT customer_id,\n       order_date,\n       SUM(amount) OVER (\n         PARTITION BY customer_id\n         ORDER BY order_date\n       ) AS running_total\nFROM orders;",
+    "language": "SQL",
+    "framework": null,
+    "project": null,
+    "difficulty": "medium",
+    "explanation": "SUM(...) OVER (PARTITION BY ... ORDER BY ...) es una función de ventana (window function) estándar de SQL, disponible en la mayoría de motores relacionales modernos, no ligada a un framework."
+  },
+  {
+    "snippetId": "snip-015",
+    "code": "void quicksort(int arr[], int low, int high) {\n    if (low < high) {\n        int pivot = partition(arr, low, high);\n        quicksort(arr, low, pivot - 1);\n        quicksort(arr, pivot + 1, high);\n    }\n}",
+    "language": "C",
+    "framework": null,
+    "project": null,
+    "difficulty": "easy",
+    "explanation": "Implementación clásica del algoritmo Quicksort en C puro, sin dependencias externas. La gestión manual de índices (low, high) es típica del estilo de C frente a lenguajes con estructuras de datos de alto nivel."
+  },
+  {
+    "snippetId": "snip-016",
+    "code": "const app = express();\n\napp.use(express.json());\napp.post('/users', async (req, res) => {\n  const user = await User.create(req.body);\n  res.status(201).json(user);\n});",
+    "language": "JavaScript",
+    "framework": "Express",
+    "project": null,
+    "difficulty": "easy",
+    "explanation": "express(), app.use(express.json()) y el patrón (req, res) son la firma clásica de Express, el framework HTTP minimalista más popular del ecosistema Node.js."
+  }
+]

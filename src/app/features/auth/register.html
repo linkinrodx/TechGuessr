@@ -1,0 +1,54 @@
+<main class="auth-page">
+  <h1>TechGuessr</h1>
+
+  @if (step() === 'signup') {
+    <p class="subtitle">Crear cuenta</p>
+
+    <form (ngSubmit)="onSignUp()" class="auth-form">
+      <label>
+        Usuario
+        <input type="text" name="username" [(ngModel)]="username" required autocomplete="username" />
+      </label>
+
+      <label>
+        Email
+        <input type="email" name="email" [(ngModel)]="email" required autocomplete="email" />
+      </label>
+
+      <label>
+        Contraseña
+        <input type="password" name="password" [(ngModel)]="password" required minlength="8" autocomplete="new-password" />
+      </label>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Creando cuenta...' : 'Registrarme' }}
+      </button>
+    </form>
+
+    <p class="switch-link">
+      ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a>
+    </p>
+  } @else {
+    <p class="subtitle">Confirma tu cuenta</p>
+    <p class="hint">Te enviamos un código de verificación a tu email.</p>
+
+    <form (ngSubmit)="onConfirm()" class="auth-form">
+      <label>
+        Código de confirmación
+        <input type="text" name="code" [(ngModel)]="confirmationCode" required autocomplete="one-time-code" />
+      </label>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Confirmando...' : 'Confirmar' }}
+      </button>
+    </form>
+  }
+</main>

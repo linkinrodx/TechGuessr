@@ -1,0 +1,36 @@
+<main class="summary-page">
+  <h1>Resumen de la partida</h1>
+
+  @if (isLoading()) {
+    <p class="loading">Cargando...</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (summary()) {
+    <p class="total-score">Puntaje total: {{ summary()!.TotalScore }}</p>
+    @if (summary()!.Rank !== null) {
+      <p class="rank">Posición en el leaderboard: #{{ summary()!.Rank }}</p>
+    }
+
+    <table class="rounds-table">
+      <thead>
+        <tr>
+          <th>Ronda</th>
+          <th>Puntaje</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (round of summary()!.Rounds; track round.RoundId) {
+          <tr>
+            <td>{{ round.RoundIndex }}</td>
+            <td>{{ round.Score }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="actions">
+      <button type="button" (click)="playAgain()">Jugar de nuevo</button>
+      <button type="button" (click)="viewLeaderboard()">Ver leaderboard</button>
+    </div>
+  }
+</main>

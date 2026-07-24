@@ -1,0 +1,109 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CloudFormationForCDK",
+      "Effect": "Allow",
+      "Action": "cloudformation:*",
+      "Resource": "*"
+    },
+    {
+      "Sid": "CDKBootstrapAssets",
+      "Effect": "Allow",
+      "Action": [
+        "s3:*",
+        "ecr:*",
+        "ssm:GetParameter",
+        "ssm:GetParameters"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "IamScopedToProject",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:GetRole",
+        "iam:PassRole",
+        "iam:AttachRolePolicy",
+        "iam:DetachRolePolicy",
+        "iam:PutRolePolicy",
+        "iam:DeleteRolePolicy",
+        "iam:GetRolePolicy",
+        "iam:CreatePolicy",
+        "iam:DeletePolicy",
+        "iam:CreatePolicyVersion",
+        "iam:DeletePolicyVersion",
+        "iam:GetPolicy",
+        "iam:GetPolicyVersion",
+        "iam:ListPolicyVersions",
+        "iam:TagRole",
+        "iam:TagPolicy"
+      ],
+      "Resource": [
+        "arn:aws:iam::*:role/cdk-*",
+        "arn:aws:iam::*:role/techguessr-*",
+        "arn:aws:iam::*:policy/cdk-*",
+        "arn:aws:iam::*:policy/techguessr-*"
+      ]
+    },
+    {
+      "Sid": "LambdaProject",
+      "Effect": "Allow",
+      "Action": "lambda:*",
+      "Resource": "arn:aws:lambda:*:*:function:techguessr-*"
+    },
+    {
+      "Sid": "ApiGatewayProject",
+      "Effect": "Allow",
+      "Action": "apigateway:*",
+      "Resource": "*"
+    },
+    {
+      "Sid": "DynamoDbProject",
+      "Effect": "Allow",
+      "Action": "dynamodb:*",
+      "Resource": [
+        "arn:aws:dynamodb:*:*:table/techguessr-*",
+        "arn:aws:dynamodb:*:*:table/techguessr-*/index/*"
+      ]
+    },
+    {
+      "Sid": "CognitoProject",
+      "Effect": "Allow",
+      "Action": "cognito-idp:*",
+      "Resource": "*"
+    },
+    {
+      "Sid": "CloudFrontProject",
+      "Effect": "Allow",
+      "Action": "cloudfront:*",
+      "Resource": "*"
+    },
+    {
+      "Sid": "LogsForLambda",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DeleteLogGroup",
+        "logs:DescribeLogGroups"
+      ],
+      "Resource": "arn:aws:logs:*:*:log-group:/aws/lambda/techguessr-*"
+    },
+    {
+      "Sid": "StsAssumeCdkRoles",
+      "Effect": "Allow",
+      "Action": "sts:AssumeRole",
+      "Resource": "arn:aws:iam::*:role/cdk-*"
+    },
+    {
+      "Sid": "StsCallerIdentity",
+      "Effect": "Allow",
+      "Action": "sts:GetCallerIdentity",
+      "Resource": "*"
+    }
+  ]
+}

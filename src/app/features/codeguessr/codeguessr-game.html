@@ -1,0 +1,68 @@
+<main class="game-page">
+  <header class="game-header">
+    <h1>TechGuessr — CodeGuessr</h1>
+    <div class="score-info">
+      <span>Ronda {{ game.roundIndex() }}/10</span>
+      <span>Puntaje: {{ game.totalScore() }}</span>
+    </div>
+  </header>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (isLoading()) {
+    <p class="loading">Cargando...</p>
+  } @else if (game.currentRound() && !lastResult()) {
+    <section class="snippet-card">
+      <pre><code>{{ game.currentRound()!.Code }}</code></pre>
+      <span class="difficulty">Dificultad: {{ game.currentRound()!.Difficulty }}</span>
+    </section>
+
+    <form (ngSubmit)="submitAnswer()" class="guess-form">
+      <label>
+        Lenguaje
+        <input type="text" name="language" [(ngModel)]="languageGuess" placeholder="ej. TypeScript" />
+      </label>
+      <label>
+        Framework/Librería (opcional)
+        <input type="text" name="framework" [(ngModel)]="frameworkGuess" placeholder="ej. Angular" />
+      </label>
+      <label>
+        Proyecto (opcional)
+        <input type="text" name="project" [(ngModel)]="projectGuess" placeholder="ej. Angular" />
+      </label>
+
+      <button type="submit">Responder</button>
+    </form>
+  } @else if (lastResult()) {
+    <section class="result-card">
+      <h2>{{ lastResult()!.RoundScore }} puntos esta ronda</h2>
+
+      <ul class="correctness-list">
+        <li>
+          Lenguaje: {{ lastResult()!.CorrectAnswers.Language }}
+          {{ lastResult()!.Correctness.Language ? '✅' : '❌' }}
+        </li>
+        @if (lastResult()!.Correctness.Framework !== null) {
+          <li>
+            Framework: {{ lastResult()!.CorrectAnswers.Framework }}
+            {{ lastResult()!.Correctness.Framework ? '✅' : '❌' }}
+          </li>
+        }
+        @if (lastResult()!.Correctness.Project !== null) {
+          <li>
+            Proyecto: {{ lastResult()!.CorrectAnswers.Project }}
+            {{ lastResult()!.Correctness.Project ? '✅' : '❌' }}
+          </li>
+        }
+      </ul>
+
+      <p class="explanation">{{ lastResult()!.Explanation }}</p>
+
+      <button type="button" (click)="nextRoundOrFinish()">
+        {{ game.sessionStatus() === 'finished' ? 'Ver resumen' : 'Siguiente ronda' }}
+      </button>
+    </section>
+  }
+</main>

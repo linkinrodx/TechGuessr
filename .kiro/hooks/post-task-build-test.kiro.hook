@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Build y test tras completar tarea",
+  "description": "Después de marcar una tarea de spec como completada, ejecuta el build y los tests de Angular para detectar errores de inmediato.",
+  "version": "1",
+  "when": {
+    "type": "postTaskExecution"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "cmd /c \"npm run build && npm test -- --watch=false\"",
+    "timeout": 180
+  }
+}
