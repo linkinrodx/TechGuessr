@@ -321,12 +321,10 @@ public class Function
 
         await _sessions.SaveAsync(updatedSession, session.Version);
 
-        if (updatedSession.Status == SessionStatus.Finished && caller.IsAuthenticated)
+        if (updatedSession.Status == SessionStatus.Finished && session.UserId != CallerIdentity.GuestUserId)
         {
-            // Los invitados terminan la partida y ven su resumen igual,
-            // pero no se guarda su puntaje en el leaderboard (Requirement
-            // de negocio: "inicia sesión para guardar tu progreso").
-            await _scores.RecordScoreAsync(userId, caller.Username!, updatedSession.TotalScore, updatedSession.SessionId, CodeguessrLeaderboardShard);
+            var username = caller.Username ?? session.UserId;
+            await _scores.RecordScoreAsync(session.UserId, username, updatedSession.TotalScore, updatedSession.SessionId, CodeguessrLeaderboardShard);
         }
 
         return JsonResponse(200, new AnswerResultResponse(
@@ -563,9 +561,10 @@ public class Function
 
         await _commitSessions.SaveAsync(updatedSession, session.Version);
 
-        if (updatedSession.Status == SessionStatus.Finished && caller.IsAuthenticated)
+        if (updatedSession.Status == SessionStatus.Finished && session.UserId != CallerIdentity.GuestUserId)
         {
-            await _scores.RecordScoreAsync(userId, caller.Username!, updatedSession.TotalScore, updatedSession.SessionId, CommitguessrLeaderboardShard);
+            var username = caller.Username ?? session.UserId;
+            await _scores.RecordScoreAsync(session.UserId, username, updatedSession.TotalScore, updatedSession.SessionId, CommitguessrLeaderboardShard);
         }
 
         return JsonResponse(200, new CommitAnswerResultResponse(
@@ -757,9 +756,15 @@ public class Function
 
         await _uiSessions.SaveAsync(updatedSession, session.Version);
 
-        if (updatedSession.Status == SessionStatus.Finished && caller.IsAuthenticated)
+        // Grabar score si la sesión fue creada por un usuario autenticado
+        // (userId != "guest"). Se usa caller.Username si el token sigue
+        // vigente; de lo contrario, se usa el userId (sub de Cognito) como
+        // fallback — menos legible pero garantiza que el score se graba
+        // incluso si el token expiró durante la partida.
+        if (updatedSession.Status == SessionStatus.Finished && session.UserId != CallerIdentity.GuestUserId)
         {
-            await _scores.RecordScoreAsync(userId, caller.Username!, updatedSession.TotalScore, updatedSession.SessionId, UIguessrLeaderboardShard);
+            var username = caller.Username ?? session.UserId;
+            await _scores.RecordScoreAsync(session.UserId, username, updatedSession.TotalScore, updatedSession.SessionId, UIguessrLeaderboardShard);
         }
 
         return JsonResponse(200, new UIAnswerResultResponse(

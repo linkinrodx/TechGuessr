@@ -64,30 +64,29 @@ public sealed class ScoresRepository(IAmazonDynamoDB client, string tableName)
 
     /// <summary>
     /// Posición (1-based) de una sesión en el leaderboard de un shard
-    /// específico, calculada best-effort contando cuántas entradas tienen
-    /// un totalScore mayor. Devuelve null si no se encuentra la entrada de
-    /// la sesión.
+    /// específico, calculada contando cuántas entradas tienen un totalScore
+    /// estrictamente mayor al del usuario y sumando 1. No depende de que
+    /// la entrada del usuario ya haya aparecido en el GSI (eventual
+    /// consistency), porque el rank se calcula solo a partir del score
+    /// numérico ya conocido.
     /// </summary>
-    public async Task<int?> GetRankForSessionAsync(string sessionId, int totalScore, string leaderboardShard, CancellationToken ct = default)
+    public async Task<int> GetRankForSessionAsync(string sessionId, int totalScore, string leaderboardShard, CancellationToken ct = default)
     {
         var response = await client.QueryAsync(new QueryRequest
         {
             TableName = tableName,
             IndexName = "byTotalScore",
-            KeyConditionExpression = "leaderboardShard = :shard AND totalScore >= :score",
+            KeyConditionExpression = "leaderboardShard = :shard AND totalScore > :score",
             ExpressionAttributeValues = new Dictionary<string, AttributeValue>
             {
                 [":shard"] = new() { S = leaderboardShard },
                 [":score"] = new() { N = totalScore.ToString() },
             },
             ScanIndexForward = false,
+            Select = Select.COUNT,
         }, ct);
 
-        var entries = response.Items
-            .Select(item => (SessionId: item["sessionId"].S, Score: int.Parse(item["totalScore"].N)))
-            .ToList();
-
-        var index = entries.FindIndex(e => e.SessionId == sessionId);
-        return index < 0 ? null : index + 1;
+        // rank = (cantidad de entries con score mayor) + 1
+        return (response.Count ?? 0) + 1;
     }
 }

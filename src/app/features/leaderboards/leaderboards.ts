@@ -47,10 +47,20 @@ export class Leaderboards implements OnInit {
       { title: 'UIGuessr', playRoute: '/ui-play', load: () => this.uiGame.getLeaderboard() },
     ];
 
+    const username = this.auth.currentUser()?.username;
+
     const results = await Promise.all(
       configs.map(async (config) => {
         try {
-          const entries = await config.load();
+          let entries = await config.load();
+
+          // GSI eventual consistency: si el usuario está autenticado y no
+          // aparece en los resultados, reintentar tras un breve delay.
+          if (username && !entries.some((e) => e.Username === username)) {
+            await new Promise((r) => setTimeout(r, 1500));
+            entries = await config.load();
+          }
+
           return { title: config.title, playRoute: config.playRoute, entries, errorMessage: null };
         } catch {
           return {

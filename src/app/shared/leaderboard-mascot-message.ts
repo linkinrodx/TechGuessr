@@ -22,7 +22,7 @@ export function buildLeaderboardMascotMessage(
   const rankIndex = entries.findIndex((entry) => entry.Username === currentUsername);
 
   if (rankIndex === -1) {
-    return 'Todavía no apareces en esta tabla. ¡Juega una partida para entrar al ranking!';
+    return '¡Tu puntaje se está registrando! Recarga en unos segundos para verte en la tabla.';
   }
   if (rankIndex === 0) {
     return '¡Estás en la cima de esta tabla! 🏆';

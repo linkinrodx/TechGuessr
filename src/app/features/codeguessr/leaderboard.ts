@@ -24,9 +24,18 @@ export class Leaderboard implements OnInit {
 
   async ngOnInit(): Promise<void> {
     try {
-      const entries = await this.game.getLeaderboard();
+      let entries = await this.game.getLeaderboard();
+      const username = this.auth.currentUser()?.username;
+
+      // GSI eventual consistency: si el usuario acaba de jugar y no aparece
+      // aún en los resultados, reintentar tras un breve delay.
+      if (username && !entries.some((e) => e.Username === username)) {
+        await new Promise((r) => setTimeout(r, 1500));
+        entries = await this.game.getLeaderboard();
+      }
+
       this.entries.set(entries);
-      const message = buildLeaderboardMascotMessage(entries, this.auth.currentUser()?.username);
+      const message = buildLeaderboardMascotMessage(entries, username);
       this.mascot.setMood('idle', message);
     } catch {
       this.errorMessage.set('No se pudo cargar el leaderboard.');
