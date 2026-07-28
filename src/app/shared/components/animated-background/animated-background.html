@@ -1,0 +1,33 @@
+<div class="animated-background" aria-hidden="true">
+  <div class="base-gradient"></div>
+  <div class="grid-layer"></div>
+  <div class="aurora"></div>
+
+  <div class="stars">
+    @for (star of stars; track $index) {
+      <span
+        class="star"
+        [style.left.%]="star.left"
+        [style.top.%]="star.top"
+        [style.width.px]="star.size"
+        [style.height.px]="star.size"
+        [style.animation-delay.s]="star.delay"
+        [style.animation-duration.s]="star.duration"
+      ></span>
+    }
+  </div>
+
+  <div class="particles">
+    @for (symbol of floatingSymbols; track $index) {
+      <span
+        class="particle"
+        [style.left.%]="symbol.left"
+        [style.font-size.rem]="symbol.size"
+        [style.animation-duration.s]="symbol.duration"
+        [style.animation-delay.s]="symbol.delay"
+      >{{ symbol.text }}</span>
+    }
+  </div>
+
+  <div class="vignette"></div>
+</div>

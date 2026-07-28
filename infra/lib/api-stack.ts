@@ -1,7 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import { Duration } from 'aws-cdk-lib';
 import * as apigwv2 from 'aws-cdk-lib/aws-apigatewayv2';
-import * as authorizers from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
 import * as integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as logs from 'aws-cdk-lib/aws-logs';
@@ -54,6 +53,16 @@ export class ApiStack extends cdk.Stack {
         SNIPPETS_TABLE_NAME: dataStack.snippetsTable.tableName,
         SESSIONS_TABLE_NAME: dataStack.sessionsTable.tableName,
         SCORES_TABLE_NAME: dataStack.scoresTable.tableName,
+        COMMITS_TABLE_NAME: dataStack.commitsTable.tableName,
+        COMMIT_SESSIONS_TABLE_NAME: dataStack.commitSessionsTable.tableName,
+        UI_SCREENSHOTS_TABLE_NAME: dataStack.uiScreenshotsTable.tableName,
+        UI_SESSIONS_TABLE_NAME: dataStack.uiSessionsTable.tableName,
+        // Usadas por Auth/OptionalJwtValidator.cs para validar el JWT
+        // manualmente: las rutas de sesión ya no tienen JWT authorizer de
+        // API Gateway (ver más abajo), así que la Lambda decide ella
+        // misma si el caller está autenticado o es invitado.
+        USER_POOL_ID: authStack.userPool.userPoolId,
+        USER_POOL_CLIENT_ID: authStack.userPoolClient.userPoolClientId,
       },
       logGroup: new logs.LogGroup(this, 'GameFunctionLogGroup', {
         logGroupName: '/aws/lambda/techguessr-game-function',
@@ -80,22 +89,17 @@ export class ApiStack extends cdk.Stack {
       }),
     });
 
-    // Permisos IAM acotados exclusivamente a las 3 tablas del proyecto
+    // Permisos IAM acotados exclusivamente a las tablas del proyecto
     // (ver docs/iam-policy.json para la policy del usuario IAM de despliegue;
     // esto es la policy de EJECUCIÓN de la Lambda, un ámbito distinto y más
     // acotado todavía).
     dataStack.snippetsTable.grantReadData(this.gameFunction);
     dataStack.sessionsTable.grantReadWriteData(this.gameFunction);
     dataStack.scoresTable.grantReadWriteData(this.gameFunction);
-
-    // HTTP API con JWT authorizer apuntando al User Pool de AuthStack.
-    const jwtAuthorizer = new authorizers.HttpJwtAuthorizer(
-      'CognitoAuthorizer',
-      `https://cognito-idp.${this.region}.amazonaws.com/${authStack.userPool.userPoolId}`,
-      {
-        jwtAudience: [authStack.userPoolClient.userPoolClientId],
-      },
-    );
+    dataStack.commitsTable.grantReadData(this.gameFunction);
+    dataStack.commitSessionsTable.grantReadWriteData(this.gameFunction);
+    dataStack.uiScreenshotsTable.grantReadData(this.gameFunction);
+    dataStack.uiSessionsTable.grantReadWriteData(this.gameFunction);
 
     this.httpApi = new apigwv2.HttpApi(this, 'HttpApi', {
       apiName: 'techguessr-api',
@@ -111,38 +115,110 @@ export class ApiStack extends cdk.Stack {
       this.gameFunction,
     );
 
-    // Rutas autenticadas (requieren JWT de Cognito).
+    // Rutas de sesión de CodeGuessr: públicas a nivel de API Gateway (sin
+    // JWT authorizer). El login ya no es obligatorio para jugar; la Lambda
+    // valida el JWT ella misma cuando viene presente y trata como invitado
+    // cuando no (ver Auth/OptionalJwtValidator.cs). Los invitados juegan
+    // normal pero no se guardan en el leaderboard.
     this.httpApi.addRoutes({
       path: '/sessions',
       methods: [apigwv2.HttpMethod.POST],
       integration: gameIntegration,
-      authorizer: jwtAuthorizer,
     });
 
     this.httpApi.addRoutes({
       path: '/rounds/next',
       methods: [apigwv2.HttpMethod.GET],
       integration: gameIntegration,
-      authorizer: jwtAuthorizer,
     });
 
     this.httpApi.addRoutes({
       path: '/rounds/{roundId}/answer',
       methods: [apigwv2.HttpMethod.POST],
       integration: gameIntegration,
-      authorizer: jwtAuthorizer,
     });
 
     this.httpApi.addRoutes({
       path: '/sessions/{sessionId}/summary',
       methods: [apigwv2.HttpMethod.GET],
       integration: gameIntegration,
-      authorizer: jwtAuthorizer,
     });
 
     // Ruta pública, sin authorizer (ver design.md, Requirement 7.4).
     this.httpApi.addRoutes({
       path: '/leaderboard',
+      methods: [apigwv2.HttpMethod.GET],
+      integration: gameIntegration,
+    });
+
+    // ============================================================================
+    // CommitGuessr Routes
+    // ============================================================================
+
+    // Rutas de sesión de CommitGuessr: públicas, análogo a CodeGuessr.
+    this.httpApi.addRoutes({
+      path: '/commit-sessions',
+      methods: [apigwv2.HttpMethod.POST],
+      integration: gameIntegration,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/commit-rounds/next',
+      methods: [apigwv2.HttpMethod.GET],
+      integration: gameIntegration,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/commit-rounds/{roundId}/answer',
+      methods: [apigwv2.HttpMethod.POST],
+      integration: gameIntegration,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/commit-sessions/{sessionId}/summary',
+      methods: [apigwv2.HttpMethod.GET],
+      integration: gameIntegration,
+    });
+
+    // Ruta pública, sin authorizer (análoga a /leaderboard).
+    this.httpApi.addRoutes({
+      path: '/commit-leaderboard',
+      methods: [apigwv2.HttpMethod.GET],
+      integration: gameIntegration,
+    });
+
+    // ============================================================================
+    // UIGuessr Routes
+    // ============================================================================
+
+    // Rutas de sesión de UIGuessr: públicas, análogo a CodeGuessr/CommitGuessr.
+    this.httpApi.addRoutes({
+      path: '/ui-sessions',
+      methods: [apigwv2.HttpMethod.POST],
+      integration: gameIntegration,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/ui-rounds/next',
+      methods: [apigwv2.HttpMethod.GET],
+      integration: gameIntegration,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/ui-rounds/{roundId}/answer',
+      methods: [apigwv2.HttpMethod.POST],
+      integration: gameIntegration,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/ui-sessions/{sessionId}/summary',
+      methods: [apigwv2.HttpMethod.GET],
+      integration: gameIntegration,
+    });
+
+    // Ruta pública, sin authorizer (análoga a /leaderboard y /commit-leaderboard).
+    this.httpApi.addRoutes({
+      path: '/ui-leaderboard',
       methods: [apigwv2.HttpMethod.GET],
       integration: gameIntegration,
     });

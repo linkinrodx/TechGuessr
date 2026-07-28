@@ -12,6 +12,10 @@ export class DataStack extends cdk.Stack {
   public readonly snippetsTable: dynamodb.Table;
   public readonly sessionsTable: dynamodb.Table;
   public readonly scoresTable: dynamodb.Table;
+  public readonly commitsTable: dynamodb.Table;
+  public readonly commitSessionsTable: dynamodb.Table;
+  public readonly uiScreenshotsTable: dynamodb.Table;
+  public readonly uiSessionsTable: dynamodb.Table;
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -60,6 +64,72 @@ export class DataStack extends cdk.Stack {
       // Aceptable para el tamaño de datos de un MVP de hackathon.
       partitionKey: { name: 'leaderboardShard', type: dynamodb.AttributeType.STRING },
       sortKey: { name: 'totalScore', type: dynamodb.AttributeType.NUMBER },
+      projectionType: dynamodb.ProjectionType.ALL,
+    });
+
+    // ============================================================================
+    // CommitGuessr Tables
+    // ============================================================================
+
+    // techguessr-commits: catálogo curado de commits/diffs para CommitGuessr.
+    // Similar a snippetsTable pero con datos específicos de commits.
+    this.commitsTable = new dynamodb.Table(this, 'CommitsTable', {
+      tableName: 'techguessr-commits',
+      partitionKey: { name: 'commitId', type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: RemovalPolicy.DESTROY,
+    });
+    this.commitsTable.addGlobalSecondaryIndex({
+      indexName: 'byRandomBucket',
+      partitionKey: { name: 'randomBucket', type: dynamodb.AttributeType.NUMBER },
+      sortKey: { name: 'commitId', type: dynamodb.AttributeType.STRING },
+      projectionType: dynamodb.ProjectionType.ALL,
+    });
+
+    // techguessr-commit-sessions: sesiones de CommitGuessr (10 rondas).
+    this.commitSessionsTable = new dynamodb.Table(this, 'CommitSessionsTable', {
+      tableName: 'techguessr-commit-sessions',
+      partitionKey: { name: 'sessionId', type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: RemovalPolicy.DESTROY,
+    });
+    this.commitSessionsTable.addGlobalSecondaryIndex({
+      indexName: 'byUserId',
+      partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
+      sortKey: { name: 'createdAt', type: dynamodb.AttributeType.STRING },
+      projectionType: dynamodb.ProjectionType.ALL,
+    });
+
+    // ============================================================================
+    // UIGuessr Tables
+    // ============================================================================
+
+    // techguessr-ui-screenshots: catálogo curado de screenshots de UI para UIGuessr.
+    // Similar a commitsTable pero con datos específicos de screenshots.
+    this.uiScreenshotsTable = new dynamodb.Table(this, 'UIScreenshotsTable', {
+      tableName: 'techguessr-ui-screenshots',
+      partitionKey: { name: 'screenshotId', type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: RemovalPolicy.DESTROY,
+    });
+    this.uiScreenshotsTable.addGlobalSecondaryIndex({
+      indexName: 'byRandomBucket',
+      partitionKey: { name: 'randomBucket', type: dynamodb.AttributeType.NUMBER },
+      sortKey: { name: 'screenshotId', type: dynamodb.AttributeType.STRING },
+      projectionType: dynamodb.ProjectionType.ALL,
+    });
+
+    // techguessr-ui-sessions: sesiones de UIGuessr (10 rondas).
+    this.uiSessionsTable = new dynamodb.Table(this, 'UISessionsTable', {
+      tableName: 'techguessr-ui-sessions',
+      partitionKey: { name: 'sessionId', type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: RemovalPolicy.DESTROY,
+    });
+    this.uiSessionsTable.addGlobalSecondaryIndex({
+      indexName: 'byUserId',
+      partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
+      sortKey: { name: 'createdAt', type: dynamodb.AttributeType.STRING },
       projectionType: dynamodb.ProjectionType.ALL,
     });
   }

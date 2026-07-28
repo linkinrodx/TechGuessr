@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, InjectionToken, signal } from '@angular/core';
 import {
   CognitoUser,
   CognitoUserPool,
@@ -13,6 +13,21 @@ export interface AuthenticatedUser {
 }
 
 /**
+ * Token de inyección para el CognitoUserPool. Extraído a un factory
+ * inyectable (en vez de `new CognitoUserPool(...)` directo en el
+ * constructor de AuthService) para poder sustituirlo por un mock en
+ * tests unitarios sin necesidad de un User Pool real de AWS — ver
+ * auth.service.spec.ts, que provee un stub vía este mismo token.
+ */
+export const COGNITO_USER_POOL = new InjectionToken<CognitoUserPool>('COGNITO_USER_POOL', {
+  factory: () =>
+    new CognitoUserPool({
+      UserPoolId: environment.cognito.userPoolId,
+      ClientId: environment.cognito.userPoolClientId,
+    }),
+});
+
+/**
  * Envoltura sobre el SDK de Cognito (amazon-cognito-identity-js). Ver
  * .kiro/specs/codeguessr-mvp/design.md, "Backend/Frontend: AuthService".
  *
@@ -22,10 +37,7 @@ export interface AuthenticatedUser {
  */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly userPool = new CognitoUserPool({
-    UserPoolId: environment.cognito.userPoolId,
-    ClientId: environment.cognito.userPoolClientId,
-  });
+  private readonly userPool = inject(COGNITO_USER_POOL);
 
   private readonly currentUserSignal = signal<AuthenticatedUser | null>(null);
   readonly currentUser = this.currentUserSignal.asReadonly();

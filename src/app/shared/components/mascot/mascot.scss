@@ -1,0 +1,306 @@
+.mascot {
+  position: fixed;
+  right: var(--spacing-lg);
+  bottom: var(--spacing-lg);
+  z-index: 40;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-xs);
+}
+
+.mascot-bubble {
+  pointer-events: auto;
+  max-width: 220px;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 8px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.8rem;
+  color: var(--color-text-primary);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  animation: bubble-in 200ms ease-out;
+
+  span {
+    flex: 1;
+  }
+
+  &.dismissing {
+    animation: bubble-out 250ms ease-in forwards;
+  }
+}
+
+.mascot-bubble-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0 0 var(--spacing-xs);
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+  }
+}
+
+.mascot-body {
+  /* Paleta propia del personaje (independiente del theme --color-accent,
+   * a propósito: así nunca se camufla con botones/bordes de la app,
+   * pase lo que pase con el tema de colores). */
+  --fur: #d98e4a;
+  --fur-dark: #a8632a;
+  --fur-shade: #8f5023;
+  --snout-color: #f3c98a;
+  --nose-color: #2b2b2b;
+  --frame-color: #2b2b2b;
+  --lens-color: #eaf4ff;
+
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+  animation: float 3s ease-in-out infinite;
+  transform-origin: 50% 90%;
+}
+
+.body-shadow {
+  fill: rgba(0, 0, 0, 0.2);
+}
+
+.ear {
+  fill: var(--fur-dark);
+  transform-origin: 30px 45px;
+}
+.ear-right {
+  transform-origin: 70px 45px;
+}
+
+.head {
+  fill: var(--fur);
+}
+.snout {
+  fill: var(--snout-color);
+}
+
+.nose {
+  fill: var(--nose-color);
+}
+
+.eyebrow {
+  stroke: var(--fur-shade);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  fill: none;
+  opacity: 0;
+}
+
+.glasses {
+  rect {
+    fill: var(--lens-color);
+    fill-opacity: 0.25;
+    stroke: var(--frame-color);
+    stroke-width: 2.5;
+  }
+  line {
+    stroke: var(--frame-color);
+    stroke-width: 2.5;
+  }
+}
+
+.eye {
+  fill: var(--nose-color);
+}
+
+.tear {
+  fill: #7dd3fc;
+  opacity: 0;
+}
+
+.mouth {
+  display: none;
+}
+.mouth-idle,
+.mouth-thinking,
+.mouth-sad {
+  stroke: var(--nose-color);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  fill: none;
+}
+.mouth-happy path:first-child {
+  fill: var(--nose-color);
+}
+.tongue {
+  fill: #f472b6;
+}
+
+.collar {
+  stroke: #4a90a4;
+  stroke-width: 4;
+  fill: none;
+}
+.collar-tag {
+  fill: #facc15;
+}
+
+.sparkle {
+  fill: #facc15;
+  opacity: 0;
+  transform-origin: center;
+}
+
+/* ---------- Mood: idle (default) ---------- */
+.mood-idle .mouth-idle {
+  display: block;
+}
+
+/* ---------- Mood: thinking ---------- */
+.mood-thinking .mouth-thinking {
+  display: block;
+}
+.mood-thinking .eyebrow {
+  opacity: 1;
+}
+.mood-thinking .ear {
+  animation: ear-perk 700ms ease-in-out infinite;
+}
+.mood-thinking .mascot-body {
+  animation: float 1.3s ease-in-out infinite;
+}
+
+/* ---------- Mood: happy ---------- */
+.mood-happy .mouth-happy {
+  display: block;
+}
+.mood-happy .tongue {
+  animation: tongue-wag 400ms ease-in-out infinite;
+}
+.mood-happy .mascot-body {
+  animation: bounce 500ms ease-out;
+}
+.mood-happy .ear {
+  animation: ear-flap 500ms ease-out;
+}
+
+/* ---------- Mood: sad ---------- */
+.mood-sad .mouth-sad {
+  display: block;
+}
+.mood-sad .tear {
+  opacity: 1;
+  animation: tear-drop 1.4s ease-in infinite;
+}
+.mood-sad .mascot-body {
+  animation: droop 400ms ease-out forwards;
+}
+.mood-sad .ear {
+  transform: rotate(-4deg);
+}
+
+/* ---------- Mood: celebrating ---------- */
+.mood-celebrating .mouth-happy {
+  display: block;
+}
+.mood-celebrating .tongue {
+  animation: tongue-wag 400ms ease-in-out infinite;
+}
+.mood-celebrating .mascot-body {
+  animation: celebrate 700ms ease-in-out infinite;
+}
+.mood-celebrating .sparkle {
+  animation: sparkle-pop 900ms ease-in-out infinite;
+}
+.mood-celebrating .sparkle:nth-child(2) {
+  animation-delay: 300ms;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes ear-perk {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-6deg); }
+}
+
+@keyframes ear-flap {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(10deg); }
+}
+
+@keyframes tongue-wag {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(1.5px); }
+}
+
+@keyframes tear-drop {
+  0% { opacity: 0; transform: translateY(0); }
+  20% { opacity: 1; }
+  80% { opacity: 1; transform: translateY(6px); }
+  100% { opacity: 0; transform: translateY(8px); }
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  40% { transform: translateY(-14px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes droop {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(4px) rotate(-4deg); }
+}
+
+@keyframes celebrate {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-10px) rotate(3deg); }
+}
+
+@keyframes sparkle-pop {
+  0%, 100% { opacity: 0; transform: scale(0.6); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+@keyframes bubble-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bubble-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot-body,
+  .ear,
+  .tongue,
+  .tear,
+  .sparkle,
+  .mascot-bubble {
+    animation: none !important;
+  }
+  .mood-sad .tear {
+    opacity: 0.8;
+  }
+}
+
+@media (max-width: 480px) {
+  .mascot {
+    right: var(--spacing-sm);
+    bottom: var(--spacing-sm);
+  }
+  .mascot-bubble {
+    max-width: 160px;
+    font-size: 0.75rem;
+  }
+}

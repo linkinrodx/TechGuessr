@@ -1,0 +1,44 @@
+<main class="leaderboards-page">
+  <h1>Leaderboards</h1>
+
+  @if (isLoading()) {
+    <p class="loading">Cargando...</p>
+  } @else {
+    <div class="leaderboards-grid">
+      @for (section of sections(); track section.title) {
+        <section class="leaderboard-section">
+          <h2>{{ section.title }}</h2>
+
+          @if (section.errorMessage) {
+            <p class="error">{{ section.errorMessage }}</p>
+          } @else if (section.entries.length === 0) {
+            <p class="empty">Todavía no hay partidas completadas. ¡Sé el primero!</p>
+          } @else {
+            <table class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Jugador</th>
+                  <th>Puntaje</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (entry of section.entries; track entry.Username + entry.AchievedAt; let i = $index) {
+                  <tr [class.own-row]="isOwnEntry(entry)">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ entry.Username }}</td>
+                    <td>{{ entry.TotalScore }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+
+          <a [routerLink]="section.playRoute" class="back-link">Jugar</a>
+        </section>
+      }
+    </div>
+  }
+
+  <a routerLink="/" class="home-link">Volver al inicio</a>
+</main>

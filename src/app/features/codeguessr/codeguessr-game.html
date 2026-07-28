@@ -1,57 +1,27 @@
 <main class="game-page">
-  <header class="game-header">
-    <h1>TechGuessr — CodeGuessr</h1>
-    <div class="score-info">
-      <span>Ronda {{ game.roundIndex() }}/10</span>
-      <span>Puntaje: {{ game.totalScore() }}</span>
-    </div>
-  </header>
-
   @if (errorMessage()) {
     <p class="error">{{ errorMessage() }}</p>
   }
 
   @if (isLoading()) {
     <p class="loading">Cargando...</p>
-  } @else if (game.currentRound() && !lastResult()) {
-    <section class="snippet-card">
-      <pre><code>{{ game.currentRound()!.Code }}</code></pre>
-      <span class="difficulty">Dificultad: {{ game.currentRound()!.Difficulty }}</span>
-    </section>
-
-    <form (ngSubmit)="submitAnswer()" class="guess-form">
-      <label>
-        Lenguaje
-        <input type="text" name="language" [(ngModel)]="languageGuess" placeholder="ej. TypeScript" />
-      </label>
-      <label>
-        Framework/Librería (opcional)
-        <input type="text" name="framework" [(ngModel)]="frameworkGuess" placeholder="ej. Angular" />
-      </label>
-      <label>
-        Proyecto (opcional)
-        <input type="text" name="project" [(ngModel)]="projectGuess" placeholder="ej. Angular" />
-      </label>
-
-      <button type="submit">Responder</button>
-    </form>
   } @else if (lastResult()) {
     <section class="result-card">
-      <h2>{{ lastResult()!.RoundScore }} puntos esta ronda</h2>
+      <h2>{{ animatedRoundScore() }} puntos esta ronda</h2>
 
       <ul class="correctness-list">
-        <li>
+        <li [class.correct]="lastResult()!.Correctness.Language" [class.incorrect]="!lastResult()!.Correctness.Language">
           Lenguaje: {{ lastResult()!.CorrectAnswers.Language }}
           {{ lastResult()!.Correctness.Language ? '✅' : '❌' }}
         </li>
         @if (lastResult()!.Correctness.Framework !== null) {
-          <li>
+          <li [class.correct]="lastResult()!.Correctness.Framework" [class.incorrect]="!lastResult()!.Correctness.Framework">
             Framework: {{ lastResult()!.CorrectAnswers.Framework }}
             {{ lastResult()!.Correctness.Framework ? '✅' : '❌' }}
           </li>
         }
         @if (lastResult()!.Correctness.Project !== null) {
-          <li>
+          <li [class.correct]="lastResult()!.Correctness.Project" [class.incorrect]="!lastResult()!.Correctness.Project">
             Proyecto: {{ lastResult()!.CorrectAnswers.Project }}
             {{ lastResult()!.Correctness.Project ? '✅' : '❌' }}
           </li>
@@ -60,9 +30,103 @@
 
       <p class="explanation">{{ lastResult()!.Explanation }}</p>
 
-      <button type="button" (click)="nextRoundOrFinish()">
+      <button type="button" #nextRoundButton (click)="nextRoundOrFinish()" [disabled]="isLoading()">
         {{ game.sessionStatus() === 'finished' ? 'Ver resumen' : 'Siguiente ronda' }}
       </button>
     </section>
+  } @else if (game.currentRound()) {
+    <section class="snippet-card" [class.entering]="snippetEntering()">
+      <pre><code [appHighlightCode]="game.currentRound()!.Code"></code></pre>
+      <span class="difficulty">Dificultad: {{ game.currentRound()!.Difficulty }}</span>
+    </section>
+
+    <form (ngSubmit)="submitAnswer()" class="guess-form">
+      <label class="autocomplete-field">
+        Lenguaje
+        <input
+          #languageInput
+          type="text"
+          name="language"
+          [ngModel]="languageGuess()"
+          (ngModelChange)="languageGuess.set($event)"
+          placeholder="ej. TypeScript"
+          autocomplete="off"
+          (focus)="onSuggestionsFocus('language')"
+          (blur)="onSuggestionsBlur()"
+          (keydown)="onSuggestionsKeydown($event, 'language', languageSuggestions())"
+        />
+        @if (languageSuggestions().length > 0) {
+          <ul class="suggestions-list">
+            @for (option of languageSuggestions(); track option; let i = $index) {
+              <li>
+                <button
+                  type="button"
+                  [class.active]="i === activeSuggestionIndex()"
+                  (mousedown)="selectSuggestion('language', option)"
+                >{{ option }}</button>
+              </li>
+            }
+          </ul>
+        }
+      </label>
+      <label class="autocomplete-field">
+        Framework/Librería (opcional)
+        <input
+          #frameworkInput
+          type="text"
+          name="framework"
+          [ngModel]="frameworkGuess()"
+          (ngModelChange)="frameworkGuess.set($event)"
+          placeholder="ej. Angular"
+          autocomplete="off"
+          (focus)="onSuggestionsFocus('framework')"
+          (blur)="onSuggestionsBlur()"
+          (keydown)="onSuggestionsKeydown($event, 'framework', frameworkSuggestions())"
+        />
+        @if (frameworkSuggestions().length > 0) {
+          <ul class="suggestions-list">
+            @for (option of frameworkSuggestions(); track option; let i = $index) {
+              <li>
+                <button
+                  type="button"
+                  [class.active]="i === activeSuggestionIndex()"
+                  (mousedown)="selectSuggestion('framework', option)"
+                >{{ option }}</button>
+              </li>
+            }
+          </ul>
+        }
+      </label>
+      <label class="autocomplete-field">
+        Proyecto (opcional)
+        <input
+          #projectInput
+          type="text"
+          name="project"
+          [ngModel]="projectGuess()"
+          (ngModelChange)="projectGuess.set($event)"
+          placeholder="ej. Angular"
+          autocomplete="off"
+          (focus)="onSuggestionsFocus('project')"
+          (blur)="onSuggestionsBlur()"
+          (keydown)="onSuggestionsKeydown($event, 'project', projectSuggestions())"
+        />
+        @if (projectSuggestions().length > 0) {
+          <ul class="suggestions-list">
+            @for (option of projectSuggestions(); track option; let i = $index) {
+              <li>
+                <button
+                  type="button"
+                  [class.active]="i === activeSuggestionIndex()"
+                  (mousedown)="selectSuggestion('project', option)"
+                >{{ option }}</button>
+              </li>
+            }
+          </ul>
+        }
+      </label>
+
+      <button type="submit" [disabled]="isLoading()">Responder</button>
+    </form>
   }
 </main>

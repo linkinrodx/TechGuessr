@@ -1,0 +1,272 @@
+{
+  "humanOrAI": [
+    {
+      "id": "hoa-1",
+      "content": "Implementing a binary search tree in TypeScript requires careful attention to type safety. The key insight is that each node must maintain a reference to its parent, left child, and right child. This creates a recursive structure that allows for efficient O(log n) lookups in balanced trees. However, maintaining balance is non-trivial—algorithms like AVL or Red-Black trees add complexity but guarantee performance.",
+      "isHuman": true,
+      "difficulty": "medium",
+      "hints": ["Specific technical details", "Natural flow", "Acknowledges complexity"],
+      "explanation": "Escrito por un humano. El texto muestra conocimiento específico con matices (menciona tanto AVL como Red-Black), reconoce trade-offs reales, y tiene un flujo natural sin ser excesivamente genérico."
+    },
+    {
+      "id": "hoa-2",
+      "content": "When working with binary search trees, it's important to understand the fundamental concepts of tree data structures. Each node contains a value and pointers to child nodes. The tree structure provides efficient data organization. Proper implementation ensures good performance. Trees are commonly used in computer science applications.",
+      "isHuman": false,
+      "difficulty": "easy",
+      "hints": ["Generic statements", "Repetitive structure", "Lacks specific examples"],
+      "explanation": "Generado por IA. El texto es excesivamente genérico, repite conceptos básicos sin profundizar, y tiene una estructura formulaica. Frases como 'proper implementation ensures good performance' son típicamente generadas por IA—verdaderas pero vacías."
+    },
+    {
+      "id": "hoa-3",
+      "content": "I spent three hours debugging this Redux action yesterday and finally realized I was dispatching to the wrong store slice. Classic mistake. The error message was misleading because it showed 'undefined' instead of telling me the slice didn't exist. Sometimes I wonder if Redux is worth the boilerplate, but when you have complex state... yeah, probably still worth it.",
+      "isHuman": true,
+      "difficulty": "easy",
+      "hints": ["Personal experience", "Informal tone", "Self-reflection"],
+      "explanation": "Escrito por un humano. El tono conversacional, la anécdota personal específica, y la reflexión honesta sobre trade-offs son marcadores claros de escritura humana. La IA rara vez expresa dudas o frustración de forma tan auténtica."
+    },
+    {
+      "id": "hoa-4",
+      "content": "React hooks have revolutionized the way developers write components by providing a more intuitive API for state management and side effects. The useState and useEffect hooks are particularly powerful tools that enable functional components to handle complex logic. This paradigm shift represents a significant advancement in modern web development practices.",
+      "isHuman": false,
+      "difficulty": "medium",
+      "hints": ["Marketing language", "Buzzwords", "Lacks critical perspective"],
+      "explanation": "Generado por IA. El texto usa lenguaje de marketing ('revolutionized', 'paradigm shift', 'significant advancement') sin crítica o matices. Un humano con experiencia real mencionaría problemas específicos que los hooks resuelven o crean."
+    },
+    {
+      "id": "hoa-5",
+      "content": "The key to understanding asynchronous JavaScript is recognizing that callbacks, promises, and async/await are all solving the same fundamental problem: managing code execution over time. Each approach has its place. Callbacks work fine for simple cases but become unwieldy with nesting. Promises clean that up but can still be verbose. Async/await is syntactic sugar that makes async code read like sync code, which is usually what you want—though understanding the underlying promise chain is still crucial for debugging.",
+      "isHuman": true,
+      "difficulty": "hard",
+      "hints": ["Nuanced comparison", "Practical experience", "Balanced perspective"],
+      "explanation": "Escrito por un humano. El texto muestra comprensión profunda con comparaciones balanceadas, reconoce casos de uso específicos, y enfatiza la importancia del conocimiento subyacente para debugging—señales de experiencia práctica."
+    },
+    {
+      "id": "hoa-6",
+      "content": "Asynchronous programming in JavaScript can be achieved through various methods. Callbacks allow functions to execute after operations complete. Promises provide a cleaner approach to handling asynchronous operations. Async/await syntax offers improved readability. Understanding these concepts is essential for effective JavaScript development.",
+      "isHuman": false,
+      "difficulty": "easy",
+      "hints": ["List-like structure", "No real insights", "Textbook tone"],
+      "explanation": "Generado por IA. Estructura de lista sin cohesión narrativa, afirmaciones genéricas sin ejemplos concretos, y tono de manual sin personalidad. Falta la experiencia práctica que mostraría un desarrollador real."
+    },
+    {
+      "id": "hoa-7",
+      "content": "CSS Grid and Flexbox aren't competing layout systems—they're complementary. I use Grid for two-dimensional layouts where I need precise control over both rows and columns, like dashboard layouts or photo galleries. Flexbox is better for one-dimensional flows, especially when items need to wrap or when you don't know the exact number of items upfront. The 'grid vs flexbox' debate is a false dichotomy; use both.",
+      "isHuman": true,
+      "difficulty": "medium",
+      "hints": ["Clear use cases", "Dismisses false debate", "Practical examples"],
+      "explanation": "Escrito por un humano. El texto muestra decisiones basadas en experiencia real, proporciona ejemplos concretos de uso, y activamente refuta un debate común—señales de alguien que ha trabajado con ambas tecnologías."
+    },
+    {
+      "id": "hoa-8",
+      "content": "CSS Grid and Flexbox are modern layout techniques that provide powerful capabilities for web design. Grid excels at creating complex two-dimensional layouts. Flexbox is ideal for one-dimensional layouts. Both technologies enhance responsive design capabilities. Developers should learn both to maximize their layout options.",
+      "isHuman": false,
+      "difficulty": "medium",
+      "hints": ["Generic comparisons", "No specific guidance", "Safe statements"],
+      "explanation": "Generado por IA. Comparaciones superficiales sin criterios específicos de cuándo usar cada uno, lenguaje seguro y genérico, y falta de opiniones fuertes o ejemplos concretos que un desarrollador experimentado proporcionaría."
+    }
+  ],
+  "hallucinationHunter": [
+    {
+      "id": "hh-1",
+      "topic": "TypeScript",
+      "difficulty": "medium",
+      "statements": [
+        {
+          "text": "TypeScript was first released in 2012 by Microsoft.",
+          "isHallucination": false,
+          "explanation": "Correcto. TypeScript fue lanzado públicamente por Microsoft en octubre de 2012."
+        },
+        {
+          "text": "TypeScript files use the .ts extension.",
+          "isHallucination": false,
+          "explanation": "Correcto. Los archivos TypeScript usan la extensión .ts, y .tsx para archivos con JSX."
+        },
+        {
+          "text": "TypeScript introduced the 'readonly' keyword in version 4.0.",
+          "isHallucination": true,
+          "explanation": "Falso. El keyword 'readonly' existe desde TypeScript 2.0 (2016), no 4.0."
+        },
+        {
+          "text": "TypeScript compiles to JavaScript.",
+          "isHallucination": false,
+          "explanation": "Correcto. TypeScript es un superset de JavaScript que transpila a JavaScript puro."
+        },
+        {
+          "text": "TypeScript has a built-in 'integer' type separate from 'number'.",
+          "isHallucination": true,
+          "explanation": "Falso. TypeScript solo tiene el tipo 'number' para todos los valores numéricos, no tiene un tipo 'integer' separado."
+        }
+      ]
+    },
+    {
+      "id": "hh-2",
+      "topic": "React",
+      "difficulty": "easy",
+      "statements": [
+        {
+          "text": "React was created by Facebook (now Meta).",
+          "isHallucination": false,
+          "explanation": "Correcto. React fue desarrollado por Facebook y lanzado en 2013."
+        },
+        {
+          "text": "The useState hook was introduced in React 18.",
+          "isHallucination": true,
+          "explanation": "Falso. Los hooks, incluyendo useState, fueron introducidos en React 16.8 (febrero 2019), no en React 18."
+        },
+        {
+          "text": "JSX is a syntax extension for JavaScript.",
+          "isHallucination": false,
+          "explanation": "Correcto. JSX permite escribir markup similar a HTML dentro de JavaScript."
+        },
+        {
+          "text": "React components must always return exactly one root element.",
+          "isHallucination": false,
+          "explanation": "Correcto (con matices). Desde React 16 se pueden usar Fragments, pero técnicamente siguen siendo un elemento raíz único."
+        },
+        {
+          "text": "React automatically prevents all XSS attacks without any developer intervention.",
+          "isHallucination": true,
+          "explanation": "Falso. Aunque React escapa valores por defecto, usar 'dangerouslySetInnerHTML' o ciertas prácticas inseguras pueden causar vulnerabilidades XSS."
+        }
+      ]
+    },
+    {
+      "id": "hh-3",
+      "topic": "Git",
+      "difficulty": "hard",
+      "statements": [
+        {
+          "text": "Git was created by Linus Torvalds in 2005.",
+          "isHallucination": false,
+          "explanation": "Correcto. Git fue desarrollado por Linus Torvalds para el desarrollo del kernel de Linux en 2005."
+        },
+        {
+          "text": "The command 'git revert' permanently deletes commits from history.",
+          "isHallucination": true,
+          "explanation": "Falso. 'git revert' crea un nuevo commit que deshace cambios, pero no elimina commits del historial. 'git reset --hard' es lo que puede eliminar commits locales."
+        },
+        {
+          "text": "A Git repository stores its data in the .git directory.",
+          "isHallucination": false,
+          "explanation": "Correcto. El directorio .git contiene toda la metadata y el historial del repositorio."
+        },
+        {
+          "text": "Git merge conflicts can only be resolved manually.",
+          "isHallucination": true,
+          "explanation": "Falso. Muchos conflictos simples se resuelven automáticamente por Git. Solo los conflictos que Git no puede resolver automáticamente requieren intervención manual."
+        },
+        {
+          "text": "The 'git stash' command temporarily stores uncommitted changes.",
+          "isHallucination": false,
+          "explanation": "Correcto. 'git stash' guarda cambios no commiteados en una pila temporal, permitiendo limpiar el working directory."
+        },
+        {
+          "text": "Git automatically compresses all files larger than 1MB using LZ4 algorithm.",
+          "isHallucination": true,
+          "explanation": "Falso. Git usa zlib compression, no LZ4, y no tiene un umbral automático de 1MB. Comprime objetos según su propia heurística."
+        }
+      ]
+    },
+    {
+      "id": "hh-4",
+      "topic": "Python",
+      "difficulty": "medium",
+      "statements": [
+        {
+          "text": "Python was created by Guido van Rossum.",
+          "isHallucination": false,
+          "explanation": "Correcto. Guido van Rossum creó Python y fue su 'Benevolent Dictator For Life' hasta 2018."
+        },
+        {
+          "text": "Python uses indentation to define code blocks.",
+          "isHallucination": false,
+          "explanation": "Correcto. Python usa indentación significativa en lugar de llaves o keywords como otros lenguajes."
+        },
+        {
+          "text": "The 'async' and 'await' keywords were added in Python 3.5.",
+          "isHallucination": false,
+          "explanation": "Correcto. El soporte nativo para async/await fue introducido en Python 3.5 (2015)."
+        },
+        {
+          "text": "Python's GIL (Global Interpreter Lock) allows true parallel execution of threads.",
+          "isHallucination": true,
+          "explanation": "Falso. El GIL previene la ejecución paralela real de threads en CPython. Solo un thread puede ejecutar bytecode Python a la vez."
+        },
+        {
+          "text": "List comprehensions in Python are always faster than equivalent for loops.",
+          "isHallucination": true,
+          "explanation": "Falso. Aunque generalmente más rápidas, las list comprehensions no siempre son más eficientes, especialmente para operaciones muy complejas o cuando no se necesita la lista completa en memoria."
+        }
+      ]
+    },
+    {
+      "id": "hh-5",
+      "topic": "Docker",
+      "difficulty": "easy",
+      "statements": [
+        {
+          "text": "Docker containers share the host operating system's kernel.",
+          "isHallucination": false,
+          "explanation": "Correcto. Los containers Docker comparten el kernel del host, a diferencia de las VMs que tienen su propio kernel."
+        },
+        {
+          "text": "A Dockerfile must always start with the FROM instruction.",
+          "isHallucination": false,
+          "explanation": "Correcto (con una excepción menor: puede haber comentarios antes). FROM define la imagen base y debe ser la primera instrucción ejecutable."
+        },
+        {
+          "text": "Docker was first released in 2013.",
+          "isHallucination": false,
+          "explanation": "Correcto. Docker fue lanzado públicamente en marzo de 2013."
+        },
+        {
+          "text": "Docker images are limited to a maximum size of 10GB.",
+          "isHallucination": true,
+          "explanation": "Falso. Docker no tiene un límite fijo de 10GB para imágenes. El límite depende del storage driver y filesystem del host."
+        },
+        {
+          "text": "The EXPOSE instruction in a Dockerfile automatically publishes the port to the host.",
+          "isHallucination": true,
+          "explanation": "Falso. EXPOSE solo documenta el puerto; para publicarlo realmente al host se necesita usar -p o -P al ejecutar 'docker run'."
+        }
+      ]
+    },
+    {
+      "id": "hh-6",
+      "topic": "AWS Lambda",
+      "difficulty": "hard",
+      "statements": [
+        {
+          "text": "AWS Lambda supports execution environments for Node.js, Python, Java, Go, and .NET.",
+          "isHallucination": false,
+          "explanation": "Correcto. Lambda soporta estos runtimes de forma nativa, además de custom runtimes."
+        },
+        {
+          "text": "Lambda functions have a maximum execution timeout of 15 minutes.",
+          "isHallucination": false,
+          "explanation": "Correcto. El timeout máximo configurable para una función Lambda es 900 segundos (15 minutos)."
+        },
+        {
+          "text": "Lambda automatically scales to handle millions of requests per second without any configuration.",
+          "isHallucination": true,
+          "explanation": "Falso. Aunque Lambda escala automáticamente, tiene límites de concurrencia por región (1000 por defecto) que requieren aumento de cuota para 'millions per second'."
+        },
+        {
+          "text": "Lambda functions can have a maximum memory allocation of 10,240 MB (10 GB).",
+          "isHallucination": false,
+          "explanation": "Correcto. El límite máximo de memoria para Lambda es 10,240 MB."
+        },
+        {
+          "text": "AWS Lambda charges are based on the number of requests and the duration of execution.",
+          "isHallucination": false,
+          "explanation": "Correcto. Lambda cobra por número de invocaciones y GB-segundo de compute time."
+        },
+        {
+          "text": "Lambda functions always have read-write access to /tmp with unlimited storage.",
+          "isHallucination": true,
+          "explanation": "Falso. Aunque Lambda proporciona /tmp, está limitado a 512 MB por defecto (configurable hasta 10 GB), no es ilimitado."
+        }
+      ]
+    }
+  ]
+}

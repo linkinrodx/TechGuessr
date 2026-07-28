@@ -18,7 +18,7 @@
       </thead>
       <tbody>
         @for (entry of entries(); track entry.Username + entry.AchievedAt; let i = $index) {
-          <tr>
+          <tr [class.own-row]="isOwnEntry(entry)">
             <td>{{ i + 1 }}</td>
             <td>{{ entry.Username }}</td>
             <td>{{ entry.TotalScore }}</td>

@@ -1,0 +1,117 @@
+<main class="game-page">
+  @if (!selectedMode()) {
+    <section class="mode-selection">
+      <h1>AIGuessr</h1>
+      <p class="tagline">¿Human or AI? Detecta contenido generado por IA y caza alucinaciones.</p>
+
+      <div class="mode-grid">
+        <button type="button" class="mode-card" (click)="selectMode('human-or-ai')">
+          <h3>Human or AI?</h3>
+          <p>¿Este texto lo escribió una persona o una IA?</p>
+          <span class="mode-meta">10 rondas · 500 pts por acierto</span>
+        </button>
+
+        <button type="button" class="mode-card" (click)="selectMode('hallucination-hunter')">
+          <h3>Hallucination Hunter</h3>
+          <p>Marca las afirmaciones falsas dentro de una lista generada por IA.</p>
+          <span class="mode-meta">10 rondas · 400 pts por alucinación</span>
+        </button>
+      </div>
+    </section>
+  }
+
+  @if (selectedMode()) {
+    <header class="game-header">
+      <h1>{{ selectedMode() === 'human-or-ai' ? 'Human or AI?' : 'Hallucination Hunter' }}</h1>
+      <div class="stats">
+        <span>Ronda {{ game.currentRoundNumber() }} / {{ game.totalRounds }}</span>
+        <span>Puntaje: {{ game.totalScore() }}</span>
+      </div>
+    </header>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    @if (lastResult()) {
+      <section class="result-card">
+        <h2>{{ lastResult()!.Correctness.IsCorrect ? '✅ ¡Correcto!' : '❌ Incorrecto' }}</h2>
+        <p class="round-score">{{ animatedRoundScore() }} puntos esta ronda</p>
+
+        @if (lastResult()!.CorrectAnswers.Mode === 'human-or-ai') {
+          <p class="correct-answer">
+            Respuesta correcta: {{ lastResult()!.CorrectAnswers.IsHuman ? '👤 Humano' : '🤖 IA' }}
+          </p>
+        } @else {
+          <ul class="correctness-list">
+            <li class="correct">Alucinaciones identificadas: {{ lastResult()!.Correctness.Details?.CorrectlyIdentified ?? 0 }}</li>
+            @if ((lastResult()!.Correctness.Details?.FalsePositives ?? 0) > 0) {
+              <li class="incorrect">Falsos positivos: {{ lastResult()!.Correctness.Details?.FalsePositives }}</li>
+            }
+            @if ((lastResult()!.Correctness.Details?.Missed ?? 0) > 0) {
+              <li class="incorrect">Alucinaciones no detectadas: {{ lastResult()!.Correctness.Details?.Missed }}</li>
+            }
+          </ul>
+        }
+
+        <p class="explanation">{{ lastResult()!.Explanation }}</p>
+
+        <button type="button" (click)="nextRoundOrFinish()">
+          {{ game.sessionStatus() === 'finished' ? 'Ver resumen' : 'Siguiente ronda' }}
+        </button>
+      </section>
+    } @else if (game.currentRound()) {
+
+      @if (game.currentRound()!.Mode === 'human-or-ai') {
+        <section class="content-card" [class.entering]="contentEntering()">
+          <p class="text-content">{{ game.currentRound()!.Content }}</p>
+          <span class="difficulty">Dificultad: {{ game.currentRound()!.Difficulty }}</span>
+        </section>
+
+        <div class="answer-options">
+          <button
+            type="button"
+            class="option-button"
+            [class.selected]="humanOrAIGuess() === true"
+            (click)="humanOrAIGuess.set(true)">
+            👤 Humano
+          </button>
+          <button
+            type="button"
+            class="option-button"
+            [class.selected]="humanOrAIGuess() === false"
+            (click)="humanOrAIGuess.set(false)">
+            🤖 IA
+          </button>
+        </div>
+
+        <button type="button" class="submit-button" (click)="submitAnswer()" [disabled]="humanOrAIGuess() === null">
+          Confirmar respuesta
+        </button>
+      } @else {
+        <section class="content-card" [class.entering]="contentEntering()">
+          <p class="instructions">Marca las afirmaciones que son alucinaciones (falsas):</p>
+          <ul class="statements-list">
+            @for (statement of game.currentRound()!.Content; track $index) {
+              <li class="statement-item" [class.marked]="hallucinationToggles()[$index]">
+                <label>
+                  <input
+                    type="checkbox"
+                    [checked]="hallucinationToggles()[$index]"
+                    (change)="toggleHallucination($index)"
+                  />
+                  <span>{{ statement }}</span>
+                </label>
+              </li>
+            }
+          </ul>
+          <span class="difficulty">Dificultad: {{ game.currentRound()!.Difficulty }}</span>
+        </section>
+
+        <button type="button" class="submit-button" (click)="submitAnswer()">
+          Confirmar respuesta
+        </button>
+      }
+    }
+  }
+</main>

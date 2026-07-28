@@ -148,7 +148,34 @@ Limitación conocida y aceptada: `s3:*`, `apigateway:*`, `cognito-idp:*` y `clou
 
 ### Pendientes conocidos / deuda técnica (no bloqueante para el MVP)
 
-- Tests unitarios de `AuthService` no escritos (requiere refactor para inyectar `CognitoUserPool` en vez de crearlo en el constructor).
-- Dataset de 16 snippets es funcional pero pequeño; ampliarlo (tarea 2.1 original sugería 15-20, ya cumplido en el mínimo) mejoraría la variedad de la demo.
+- ~~Tests unitarios de `AuthService` no escritos (requiere refactor para inyectar `CognitoUserPool` en vez de crearlo en el constructor).~~ **Resuelto:** refactorizado con `InjectionToken` (`COGNITO_USER_POOL`) y 8 tests en `auth.service.spec.ts`.
+- ~~Dataset de 16 snippets es funcional pero pequeño; ampliarlo mejoraría la variedad de la demo.~~ **Resuelto:** ampliado a 22 snippets (Go/Gin, Java/Hibernate, TS/React, Python puro, C# puro, Kotlin/Jetpack Compose).
 - No hay dominio propio ni certificado personalizado — se usa el dominio por defecto de CloudFront.
 - Dos flujos manuales quedan fuera del pipeline automatizado: build+deploy del frontend (`npm run build -- --configuration production` + `aws s3 sync` + `aws cloudfront create-invalidation`) y build+deploy de infraestructura (`npm run build` en `infra/` + `cdk deploy --all`). No hay CI/CD configurado.
+- **Deduplicación de snippets entre rondas (Opción B → Opción A):** hoy el frontend detecta si el servidor devuelve el mismo snippet que la ronda anterior y solicita automáticamente una segunda vez (máximo 1 reintento, implementado en `GameService.loadNextRound`). Esto evita repetición *consecutiva* pero no garantiza que un snippet no aparezca dos veces en la misma sesión si hay muchas rondas o un dataset pequeño. La solución definitiva (Opción A) requiere cambios en el backend: pasar la lista de `SnippetId` ya jugados al endpoint `GET /rounds/next`, y que `SnippetsRepository.GetRandomSnippetAsync` los excluya en la query de DynamoDB. Implica modificar `SnippetsRepository.cs`, `Contracts.cs` y `Function.cs` en la Lambda, más un `cdk deploy`.
+
+### Mejoras de UX/pulido sugeridas (no bloqueante, roadmap post-hackathon)
+
+Las siguientes mejoras fueron identificadas durante la iteración final de pulido visual. Algunas ya están implementadas (marcadas), las demás quedan como backlog priorizado.
+
+#### Ya implementadas
+
+- **Fondo animado inmersivo:** gradiente aurora, cuadrícula tipo editor, estrellas y partículas de código flotando (CSS puro, `prefers-reduced-motion`-safe). Componente `AnimatedBackground` montado una sola vez en `app.html`.
+- **Mascota guía ("Byte"):** perrito programador con lentes, SVG propio (pelaje canela, sin dependencia de assets de terceros ni copyright). 5 moods (idle/thinking/happy/sad/celebrating) conectados a las 4 modalidades de juego y a las pantallas de resumen/leaderboard/home/logout. Mensajes con auto-dismiss (8s) y botón × para cerrar antes.
+- **Mensajes contextuales de la mascota:** saludo personalizado con hora del día y nombre de usuario, tips de gameplay, retos del día (landing); posición en ranking (leaderboards); despedida al cerrar sesión. Lenguaje neutro con arroba (ej. "¿List@ para tu próxima partida?").
+- **Favicon e identidad de marca:** favicon SVG propio (fondo oscuro + `{ }` en acento) + fallback `.ico` generado por script, reemplazando el ícono genérico de Angular. Integrado como logo en el `<h1>` de la landing.
+- **Título dinámico por ruta:** `AppTitleStrategy` que combina el `title` de cada ruta con el nombre del sitio (ej. "CodeGuessr · TechGuessr") en la pestaña del navegador.
+- **Meta tags y Open Graph:** `lang="es"`, meta description, `theme-color`, OG/Twitter Card con imagen banner 1200×630 (generada por `scripts/generate-og-image.js`).
+- **Iconos por modalidad:** componente `GameIcon` con SVGs propios (code, commit, ui, ai, stack, terminal) en las cards de la landing.
+- **Página 404:** ruta wildcard `**` → componente `NotFound` con mensaje temático y enlace al inicio.
+
+#### Pendientes (priorizadas de mayor a menor impacto)
+
+- **Manifest PWA** (`manifest.json` + iconos 192/512px): permitiría "instalar" la app en el teléfono/escritorio. Bajo esfuerzo, buen impacto para la demo en vivo.
+- **Loading state global:** reemplazar el "Cargando..." en texto plano por un spinner/skeleton consistente en toda la app.
+- **Manejo de error de red/offline:** si el backend cae durante la demo en vivo, mostrar un mensaje claro y opciones de retry, no una pantalla en blanco o un error técnico.
+- **Atajos de teclado documentados:** hints visuales (ej. "Tab para autocompletar") para las interacciones que ya existen pero no son descubribles sin explorar.
+- **Sonido opcional (con toggle):** feedback auditivo sutil al acertar/fallar — bajo esfuerzo pero requiere cuidado de accesibilidad (toggle visible, muted por defecto).
+- **Micro-interacciones de resultado:** confetti/pulso al acertar, shake sutil al fallar (complementaría las reacciones de la mascota con feedback en la card misma).
+- **Efecto CRT/scanlines sutil en snippet cards:** reforzaría la identidad "terminal/código" del juego sin afectar legibilidad.
+- **Indicador de racha (streak):** mostrar visualmente cuántas rondas seguidas ha acertado el lenguaje, aprovechando el signal ya existente en `GameService`.

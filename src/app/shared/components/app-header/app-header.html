@@ -1,0 +1,30 @@
+<header class="app-header">
+  <a
+    class="logo"
+    tabindex="0"
+    role="link"
+    (click)="onLogoActivate()"
+    (keydown.enter)="onLogoActivate()"
+    (keydown.space)="onLogoActivate()"
+  >
+    TechGuessr
+  </a>
+
+  @if (showRoundAndScore()) {
+    <div class="score-info">
+      <span>Ronda {{ roundIndex() }}/10</span>
+      <span>Puntaje: {{ totalScore() }}</span>
+    </div>
+  }
+
+  <div class="auth-status">
+    @if (currentUser(); as user) {
+      <span class="username">Hola, {{ user.username }}</span>
+      <button type="button" class="logout-button" (click)="onLogout()">
+        Cerrar sesión
+      </button>
+    } @else {
+      <a class="login-link" routerLink="/login">Iniciar sesión</a>
+    }
+  </div>
+</header>

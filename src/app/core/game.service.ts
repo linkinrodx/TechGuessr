@@ -34,6 +34,13 @@ export class GameService {
   private readonly sessionStatusSignal = signal<SessionStatus>('idle');
   private readonly lastErrorSignal = signal<GameError | null>(null);
 
+  /**
+   * Código del snippet de la ronda anterior, usado para deduplicación
+   * client-side entre rondas consecutivas (Opción B).
+   * Ver deuda técnica en docs/arquitectura.md → "Deduplicación de snippets".
+   */
+  private lastSnippetId: string | null = null;
+
   readonly currentRound = this.currentRoundSignal.asReadonly();
   readonly totalScore = this.totalScoreSignal.asReadonly();
   readonly sessionStatus = this.sessionStatusSignal.asReadonly();
@@ -69,7 +76,24 @@ export class GameService {
           params: { sessionId },
         }),
       );
-      this.currentRoundSignal.set(round);
+
+      // Opción B de deduplicación: si el servidor devuelve el mismo código
+      // que la ronda anterior, se solicita una segunda vez. Se limita a 1
+      // reintento para no bloquear si el dataset es muy pequeño.
+      // Ver comentario DEUDA TÉCNICA en lastSnippetId.
+      if (this.lastSnippetId !== null && round.Code === this.lastSnippetId) {
+        const retry = await firstValueFrom(
+          this.http.get<RoundResponse>(`${this.baseUrl}/rounds/next`, {
+            params: { sessionId },
+          }),
+        );
+        this.currentRoundSignal.set(retry);
+        this.lastSnippetId = retry.Code;
+      } else {
+        this.currentRoundSignal.set(round);
+        this.lastSnippetId = round.Code;
+      }
+
       this.roundStartedAtSignal.set(Date.now());
     } catch (err) {
       this.setErrorFrom(err);
@@ -100,6 +124,11 @@ export class GameService {
       if (result.SessionFinished) {
         this.sessionStatusSignal.set('finished');
       }
+
+      // Limpiar la ronda actual después de responder exitosamente para
+      // evitar que loadNextRound() piense que hay una ronda pendiente
+      this.currentRoundSignal.set(null);
+      this.roundStartedAtSignal.set(null);
 
       return result;
     } catch (err) {
@@ -146,6 +175,7 @@ export class GameService {
     this.totalScoreSignal.set(0);
     this.sessionStatusSignal.set('idle');
     this.lastErrorSignal.set(null);
+    this.lastSnippetId = null;
   }
 
   /**

@@ -1,0 +1,43 @@
+<main class="summary-page">
+  <h1>Resumen de la partida</h1>
+
+  @if (isLoading()) {
+    <p class="loading">Cargando...</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (summary()) {
+    <p class="total-score stagger-in">Puntaje total: {{ summary()!.TotalScore }}</p>
+    <p class="accuracy">Precisión: {{ accuracy }}% ({{ correctRounds }} / {{ totalRounds }} rondas correctas)</p>
+
+    <table class="rounds-table">
+      <thead>
+        <tr>
+          <th>Ronda</th>
+          <th>Resultado</th>
+          <th>Puntaje</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (round of summary()!.Rounds; track round.RoundId; let i = $index) {
+          <tr class="stagger-in" [style.animation-delay.ms]="i * 100">
+            <td>{{ round.RoundIndex + 1 }}</td>
+            <td>{{ round.Correctness?.IsCorrect ? '✅' : '❌' }}</td>
+            <td>{{ round.Score }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (isGuest()) {
+      <p class="guest-notice">
+        Jugaste sin iniciar sesión.
+        <a routerLink="/login">Inicia sesión para guardar tu progreso</a>.
+      </p>
+    }
+
+    <div class="actions">
+      <button type="button" (click)="playAgain()">Jugar de nuevo</button>
+      <button type="button" (click)="goHome()">Volver al inicio</button>
+    </div>
+  }
+</main>

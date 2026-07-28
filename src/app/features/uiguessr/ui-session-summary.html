@@ -1,0 +1,68 @@
+<main class="summary-page">
+  <h1>Resumen de la partida - UIGuessr</h1>
+
+  @if (isLoading()) {
+    <p class="loading">Cargando...</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (summary()) {
+    <p class="total-score stagger-in">Puntaje total: {{ summary()!.TotalScore }}</p>
+    @if (summary()!.Rank !== null) {
+      <p class="rank">Posición en el leaderboard: #{{ summary()!.Rank }}</p>
+    }
+
+    <table class="rounds-table">
+      <thead>
+        <tr>
+          <th>Ronda</th>
+          <th>App</th>
+          <th>Acción</th>
+          <th>Año</th>
+          <th>Puntaje</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (round of summary()!.Rounds; track round.RoundId; let i = $index) {
+          <tr class="stagger-in" [style.animation-delay.ms]="i * 100">
+            <td>{{ round.RoundIndex }}</td>
+            <td>
+              @if (round.Correctness && round.Correctness.App !== null) {
+                {{ round.Correctness.App ? '✅' : '❌' }}
+              } @else {
+                -
+              }
+            </td>
+            <td>
+              @if (round.Correctness && round.Correctness.Action !== null) {
+                {{ round.Correctness.Action ? '✅' : '❌' }}
+              } @else {
+                -
+              }
+            </td>
+            <td>
+              @if (round.Correctness && round.Correctness.Year !== null) {
+                {{ round.Correctness.Year ? '✅' : '❌' }}
+                <span class="year-diff">({{ formatYearDiff(round.Correctness.YearDiff) }})</span>
+              } @else {
+                -
+              }
+            </td>
+            <td class="score-cell">{{ round.Score }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (isGuest()) {
+      <p class="guest-notice">
+        Jugaste sin iniciar sesión: este puntaje no se guardó.
+        <a routerLink="/login">Inicia sesión para guardar tu progreso</a>.
+      </p>
+    }
+
+    <div class="actions">
+      <button type="button" (click)="playAgain()">Jugar de nuevo</button>
+      <button type="button" (click)="viewLeaderboard()">Ver leaderboard</button>
+    </div>
+  }
+</main>

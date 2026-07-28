@@ -1,1 +1,61 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Fondo y color de texto base de la app. Sin esto, html/body caen al
+ * fondo blanco por defecto del navegador y el logo del header (casi
+ * blanco, --color-text-primary) queda invisible sobre ese fondo.
+ *
+ * IMPORTANTE: el background-color va SOLO en <html>, no en <body>. Si
+ * ambos lo declaran, el navegador "asciende" el de html a fondo de
+ * canvas (se pinta primero, debajo de todo, sin importar z-index), pero
+ * el de body queda como una caja normal de contenido — y las cajas
+ * normales en flujo se pintan DESPUÉS que los descendientes con z-index
+ * negativo. Eso hacía que el rectángulo sólido de body (alto de un
+ * viewport) tapara AnimatedBackground (fixed, z-index -1) justo en esa
+ * franja, dando el efecto de fondo "cortado" al hacer scroll. Con el
+ * background solo en html, ese problema no puede ocurrir. */
+html {
+  height: 100%;
+  background-color: var(--color-background);
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+/* Tipografía monoespaciada self-hosted (Requirement 4.1). Los archivos
+ * .woff2 viven en public/fonts/jetbrains-mono/ y se sirven desde el mismo
+ * origen que el resto del bundle (sin red de terceros en runtime). */
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono/JetBrainsMono-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Tema visual de highlight.js (Requirement 3.1) — encaja con el fondo
+ * oscuro de .snippet-card (--color-surface). */
+@import 'highlight.js/styles/atom-one-dark.css';
+
+/* Requirement 6.6: reduce/neutraliza animaciones no esenciales cuando el
+ * jugador tiene activada la preferencia de accesibilidad del sistema. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

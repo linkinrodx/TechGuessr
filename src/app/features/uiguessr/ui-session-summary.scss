@@ -1,0 +1,120 @@
+.summary-page {
+  max-width: 640px;
+  margin: 3rem auto;
+  padding: var(--spacing-lg);
+  text-align: center;
+
+  h1 {
+    color: var(--color-text-primary);
+    font-size: 1.4rem;
+    margin-bottom: var(--spacing-lg);
+  }
+}
+
+.total-score {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.rank {
+  color: var(--color-text-secondary);
+}
+
+.guest-notice {
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+
+  a {
+    color: var(--color-accent);
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Aparición escalonada del puntaje total y de cada fila de la tabla,
+ * igual que en codeguessr/session-summary.scss y
+ * commitguessr/commit-session-summary.scss. */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-in {
+  opacity: 0;
+  animation: fade-in-up 300ms ease-out forwards;
+}
+
+.rounds-table {
+  width: 100%;
+  margin: var(--spacing-lg) 0;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-border);
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  th {
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+  }
+
+  .score-cell {
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  .year-diff {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    margin-left: var(--spacing-xs);
+  }
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  border: none;
+  background: var(--color-accent);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: color-mix(in srgb, var(--color-accent) 90%, black);
+  }
+}
+
+.error {
+  color: var(--color-error);
+}
+
+.loading {
+  color: var(--color-text-secondary);
+}

@@ -1,0 +1,162 @@
+[
+  {
+    "commitId": "commit-001",
+    "diff": "@@ -1,5 +1,8 @@\n export class UserService {\n-  getUser(id: string) {\n-    return this.http.get(`/api/users/${id}`);\n+  getUser(id: string): Observable<User> {\n+    return this.http.get<User>(`/api/users/${id}`).pipe(\n+      catchError(err => {\n+        console.error('Error fetching user', err);\n+        return throwError(() => new Error('User not found'));\n+      })\n+    );\n   }\n }",
+    "commitType": "bugfix",
+    "correctMessage": "fix: add error handling to user fetch",
+    "messageOptions": [
+      "fix: add error handling to user fetch",
+      "feat: add new user service method",
+      "refactor: improve user service structure",
+      "fix: update user types"
+    ],
+    "effortMinutes": 15,
+    "filesModified": 1,
+    "difficulty": "easy",
+    "explanation": "Se agregó manejo de errores con catchError y throwError, típico de un bugfix que mejora la robustez del código sin cambiar funcionalidad."
+  },
+  {
+    "commitId": "commit-002",
+    "diff": "@@ -1,3 +1,3 @@\n- * @param userId - The user identifier\n+ * @param userId - The unique user identifier (UUID format)\n  * @returns User object or null if not found\n\n@@ -10,5 +10,8 @@\n  // TODO: add caching\n- const user = await db.users.findOne({ id: userId });\n+ const user = await db.users.findOne(\n+   { id: userId },\n+   { cache: { ttl: 300 } }\n+ );\n  return user;",
+    "commitType": "feature",
+    "correctMessage": "feat: implement user query caching with 5min TTL",
+    "messageOptions": [
+      "feat: implement user query caching with 5min TTL",
+      "docs: improve parameter documentation",
+      "refactor: extract database query logic",
+      "fix: resolve caching issue"
+    ],
+    "effortMinutes": 25,
+    "filesModified": 1,
+    "difficulty": "medium",
+    "explanation": "Implementa caching (funcionalidad nueva), por eso es 'feature'. El cambio en la documentación es incidental, la clave es la adición del mecanismo de caché."
+  },
+  {
+    "commitId": "commit-003",
+    "diff": "@@ -1,10 +1,5 @@\n  function calculateDiscount(price, userType) {\n-   if (userType === 'premium') {\n-     return price * 0.8;\n-   } else if (userType === 'regular') {\n-     return price * 0.95;\n-   } else {\n-     return price;\n-   }\n+   const discounts = { premium: 0.8, regular: 0.95 };\n+   return price * (discounts[userType] ?? 1);\n  }",
+    "commitType": "refactor",
+    "correctMessage": "refactor: simplify discount calculation logic",
+    "messageOptions": [
+      "refactor: simplify discount calculation logic",
+      "feat: add new discount tiers",
+      "fix: correct discount percentages",
+      "perf: optimize discount computation"
+    ],
+    "effortMinutes": 10,
+    "filesModified": 1,
+    "difficulty": "easy",
+    "explanation": "No cambia la funcionalidad, solo mejora la legibilidad reemplazando un if/else anidado por un objeto de lookup. Refactor clásico."
+  },
+  {
+    "commitId": "commit-004",
+    "diff": "@@ -0,0 +1,42 @@\n+# Authentication Flow\n+\n+## Overview\n+This module handles user authentication via AWS Cognito.\n+\n+## Usage\n+```typescript\n+import { AuthService } from './auth.service';\n+\n+const authService = new AuthService();\n+await authService.login(username, password);\n+```\n+\n+## Methods\n+- `login(username, password)`: Authenticates user\n+- `logout()`: Ends user session\n+- `refreshToken()`: Renews access token\n+\n+## Error Handling\n+All methods throw AuthError on failure.",
+    "commitType": "docs",
+    "correctMessage": "docs: add authentication module documentation",
+    "messageOptions": [
+      "docs: add authentication module documentation",
+      "feat: add authentication service",
+      "refactor: update auth module structure",
+      "test: add auth service tests"
+    ],
+    "effortMinutes": 20,
+    "filesModified": 1,
+    "difficulty": "easy",
+    "explanation": "Agregó un archivo de documentación (README.md) sin tocar código. Es puramente 'docs'."
+  },
+  {
+    "commitId": "commit-005",
+    "diff": "@@ -0,0 +1,28 @@\n+import { describe, it, expect } from 'vitest';\n+import { formatCurrency } from './currency.utils';\n+\n+describe('formatCurrency', () => {\n+  it('formats USD correctly', () => {\n+    expect(formatCurrency(1000, 'USD')).toBe('$1,000.00');\n+  });\n+\n+  it('formats EUR correctly', () => {\n+    expect(formatCurrency(1000, 'EUR')).toBe('€1.000,00');\n+  });\n+\n+  it('handles zero', () => {\n+    expect(formatCurrency(0, 'USD')).toBe('$0.00');\n+  });\n+\n+  it('handles negative amounts', () => {\n+    expect(formatCurrency(-500, 'USD')).toBe('-$500.00');\n+  });\n+});",
+    "commitType": "test",
+    "correctMessage": "test: add currency formatting test suite",
+    "messageOptions": [
+      "test: add currency formatting test suite",
+      "feat: implement currency formatter",
+      "fix: correct currency formatting",
+      "refactor: improve test structure"
+    ],
+    "effortMinutes": 30,
+    "filesModified": 1,
+    "difficulty": "easy",
+    "explanation": "Crea un archivo de tests nuevo para una función existente. Es puramente 'test', sin cambios en código de producción."
+  },
+  {
+    "commitId": "commit-006",
+    "diff": "@@ -1,8 +1,6 @@\n  async function fetchUsers() {\n-   const response = await fetch('/api/users');\n-   const data = await response.json();\n-   return data.map(user => {\n-     return { id: user.id, name: user.name, email: user.email };\n-   });\n+   const response = await fetch('/api/users');\n+   const data = await response.json();\n+   return data.map(({ id, name, email }) => ({ id, name, email }));\n  }",
+    "commitType": "perf",
+    "correctMessage": "perf: optimize user mapping with destructuring",
+    "messageOptions": [
+      "perf: optimize user mapping with destructuring",
+      "refactor: simplify user data transformation",
+      "fix: correct user object structure",
+      "feat: add user data filtering"
+    ],
+    "effortMinutes": 5,
+    "filesModified": 1,
+    "difficulty": "medium",
+    "explanation": "Usa destructuring y arrow function implícita para reducir allocaciones intermedias. Aunque sutil, es una optimización de performance micro."
+  },
+  {
+    "commitId": "commit-007",
+    "diff": "@@ -1,15 +1,20 @@\n  class OrderProcessor {\n-   process(order) {\n-     if (!order.items || order.items.length === 0) {\n-       throw new Error('Empty order');\n+   process(order: Order): ProcessResult {\n+     this.validate(order);\n+     const total = this.calculateTotal(order);\n+     return this.submitOrder(order, total);\n+   }\n+\n+   private validate(order: Order): void {\n+     if (!order.items?.length) {\n+       throw new OrderValidationError('Empty order');\n      }\n-     let total = 0;\n-     for (const item of order.items) {\n-       total += item.price * item.quantity;\n+   }\n+\n+   private calculateTotal(order: Order): number {\n+     return order.items.reduce((sum, item) => {\n+       return sum + item.price * item.quantity;\n+     }, 0);\n-     return this.submit(order, total);\n    }\n  }",
+    "commitType": "refactor",
+    "correctMessage": "refactor: extract order validation and calculation methods",
+    "messageOptions": [
+      "refactor: extract order validation and calculation methods",
+      "feat: add order validation logic",
+      "fix: correct order total calculation",
+      "perf: improve order processing speed"
+    ],
+    "effortMinutes": 35,
+    "filesModified": 1,
+    "difficulty": "hard",
+    "explanation": "Extrae lógica a métodos privados separados, mejorando estructura sin cambiar comportamiento. Refactor de complejidad media."
+  },
+  {
+    "commitId": "commit-008",
+    "diff": "@@ -1,5 +1,9 @@\n  export function retry<T>(fn: () => Promise<T>, maxAttempts = 3): Promise<T> {\n-   return fn().catch(() => fn().catch(() => fn()));\n+   return fn().catch(async (err) => {\n+     if (maxAttempts <= 1) throw err;\n+     await new Promise(r => setTimeout(r, 1000));\n+     return retry(fn, maxAttempts - 1);\n+   });\n  }",
+    "commitType": "bugfix",
+    "correctMessage": "fix: implement proper retry with delay and max attempts",
+    "messageOptions": [
+      "fix: implement proper retry with delay and max attempts",
+      "feat: add retry mechanism with backoff",
+      "refactor: improve error handling",
+      "perf: optimize retry logic"
+    ],
+    "effortMinutes": 20,
+    "filesModified": 1,
+    "difficulty": "hard",
+    "explanation": "Corrige un retry naive que no respetaba maxAttempts ni tenía delay. Es claramente un bugfix que soluciona un problema existente."
+  },
+  {
+    "commitId": "commit-009",
+    "diff": "@@ -0,0 +1,15 @@\n+import { Routes } from '@angular/router';\n+import { DashboardComponent } from './dashboard.component';\n+import { ProfileComponent } from './profile.component';\n+\n+export const routes: Routes = [\n+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },\n+  { path: 'dashboard', component: DashboardComponent },\n+  { path: 'profile', component: ProfileComponent },\n+  { path: '**', redirectTo: 'dashboard' }\n+];",
+    "commitType": "feature",
+    "correctMessage": "feat: add routing configuration for dashboard and profile",
+    "messageOptions": [
+      "feat: add routing configuration for dashboard and profile",
+      "refactor: restructure application routes",
+      "fix: correct routing paths",
+      "docs: document routing setup"
+    ],
+    "effortMinutes": 15,
+    "filesModified": 1,
+    "difficulty": "easy",
+    "explanation": "Agrega configuración de rutas nueva, habilitando navegación entre páginas. Es una funcionalidad nueva, por lo tanto 'feature'."
+  },
+  {
+    "commitId": "commit-010",
+    "diff": "@@ -1,12 +1,8 @@\n  function processData(data) {\n-   const results = [];\n-   for (let i = 0; i < data.length; i++) {\n-     if (data[i].active) {\n-       results.push({\n-         id: data[i].id,\n-         value: data[i].value * 2\n-       });\n-     }\n-   }\n-   return results;\n+   return data\n+     .filter(item => item.active)\n+     .map(item => ({\n+       id: item.id,\n+       value: item.value * 2\n+     }));\n  }",
+    "commitType": "refactor",
+    "correctMessage": "refactor: use functional array methods for data processing",
+    "messageOptions": [
+      "refactor: use functional array methods for data processing",
+      "perf: optimize data processing performance",
+      "fix: correct data filtering logic",
+      "feat: add data transformation pipeline"
+    ],
+    "effortMinutes": 12,
+    "filesModified": 1,
+    "difficulty": "medium",
+    "explanation": "Reemplaza un loop imperativo por filter/map funcional. Mismo resultado, mejor legibilidad. Refactor típico."
+  }
+]

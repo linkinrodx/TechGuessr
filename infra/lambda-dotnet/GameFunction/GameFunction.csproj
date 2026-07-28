@@ -15,5 +15,11 @@
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.5" />
     <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="3.0.0" />
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="4.0.101.4" />
+    <!-- Validación manual de JWT de Cognito para autenticación opcional
+         (ver GameFunction/Auth/OptionalJwtValidator.cs): las rutas de
+         sesión ya no tienen un JWT authorizer de API Gateway, así que la
+         Lambda valida el token ella misma cuando viene presente. -->
+    <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.19.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.19.1" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,146 @@
+[
+  {
+    "id": "ui-001",
+    "imageUrl": "/assets/ui-screenshots/twitter-2010.svg",
+    "app": "Twitter",
+    "action": "Timeline principal",
+    "year": 2010,
+    "difficulty": "easy",
+    "explanation": "Twitter en 2010 tenía un diseño mucho más simple con fondo azul claro y el logo del pájaro azul en la parte superior izquierda."
+  },
+  {
+    "id": "ui-002",
+    "imageUrl": "/assets/ui-screenshots/facebook-2008.svg",
+    "app": "Facebook",
+    "action": "Perfil de usuario",
+    "year": 2008,
+    "difficulty": "easy",
+    "explanation": "Facebook en 2008 tenía el característico diseño azul y blanco con el muro de publicaciones en el centro."
+  },
+  {
+    "id": "ui-003",
+    "imageUrl": "/assets/ui-screenshots/youtube-2012.svg",
+    "app": "YouTube",
+    "action": "Reproduciendo video",
+    "year": 2012,
+    "difficulty": "medium",
+    "explanation": "YouTube rediseñó su interfaz en 2012 con un reproductor más grande y diseño más limpio."
+  },
+  {
+    "id": "ui-004",
+    "imageUrl": "/assets/ui-screenshots/gmail-2011.svg",
+    "app": "Gmail",
+    "action": "Bandeja de entrada",
+    "year": 2011,
+    "difficulty": "medium",
+    "explanation": "Gmail en 2011 tenía la interfaz clásica con la lista de correos en formato compacto y los labels a la izquierda."
+  },
+  {
+    "id": "ui-005",
+    "imageUrl": "/assets/ui-screenshots/instagram-2013.svg",
+    "app": "Instagram",
+    "action": "Feed de fotos",
+    "year": 2013,
+    "difficulty": "medium",
+    "explanation": "Instagram en 2013 aún no tenía Stories y el feed era puramente cronológico con el ícono de cámara prominente."
+  },
+  {
+    "id": "ui-006",
+    "imageUrl": "/assets/ui-screenshots/spotify-2015.svg",
+    "app": "Spotify",
+    "action": "Reproduciendo música",
+    "year": 2015,
+    "difficulty": "hard",
+    "explanation": "Spotify en 2015 tenía un diseño más oscuro y el reproductor en la parte inferior con controles básicos."
+  },
+  {
+    "id": "ui-007",
+    "imageUrl": "/assets/ui-screenshots/reddit-2009.svg",
+    "app": "Reddit",
+    "action": "Navegando subreddit",
+    "year": 2009,
+    "difficulty": "hard",
+    "explanation": "Reddit en 2009 tenía un diseño minimalista muy similar al actual pero con tipografía diferente y sin thumbnails grandes."
+  },
+  {
+    "id": "ui-008",
+    "imageUrl": "/assets/ui-screenshots/netflix-2014.svg",
+    "app": "Netflix",
+    "action": "Catálogo de películas",
+    "year": 2014,
+    "difficulty": "medium",
+    "explanation": "Netflix en 2014 ya usaba el diseño de carrusel horizontal pero con thumbnails más pequeños que ahora."
+  },
+  {
+    "id": "ui-009",
+    "imageUrl": "/assets/ui-screenshots/amazon-2007.svg",
+    "app": "Amazon",
+    "action": "Página de producto",
+    "year": 2007,
+    "difficulty": "hard",
+    "explanation": "Amazon en 2007 tenía un diseño más denso con menos espacio en blanco y botones más pequeños."
+  },
+  {
+    "id": "ui-010",
+    "imageUrl": "/assets/ui-screenshots/github-2011.svg",
+    "app": "GitHub",
+    "action": "Repositorio de código",
+    "year": 2011,
+    "difficulty": "medium",
+    "explanation": "GitHub en 2011 tenía el diseño clásico con el Octocat en gris y una interfaz más compacta."
+  },
+  {
+    "id": "ui-011",
+    "imageUrl": "/assets/ui-screenshots/linkedin-2010.svg",
+    "app": "LinkedIn",
+    "action": "Perfil profesional",
+    "year": 2010,
+    "difficulty": "easy",
+    "explanation": "LinkedIn en 2010 usaba una paleta de colores azul corporativo con un diseño más formal."
+  },
+  {
+    "id": "ui-012",
+    "imageUrl": "/assets/ui-screenshots/slack-2016.svg",
+    "app": "Slack",
+    "action": "Chat de equipo",
+    "year": 2016,
+    "difficulty": "medium",
+    "explanation": "Slack lanzado públicamente en 2014, en 2016 tenía la interfaz de tres columnas característica con sidebar morado."
+  },
+  {
+    "id": "ui-013",
+    "imageUrl": "/assets/ui-screenshots/airbnb-2012.svg",
+    "app": "Airbnb",
+    "action": "Búsqueda de alojamiento",
+    "year": 2012,
+    "difficulty": "hard",
+    "explanation": "Airbnb en 2012 tenía un diseño más sencillo con fotos más pequeñas y menos filtros de búsqueda."
+  },
+  {
+    "id": "ui-014",
+    "imageUrl": "/assets/ui-screenshots/whatsapp-2015.svg",
+    "app": "WhatsApp",
+    "action": "Lista de chats",
+    "year": 2015,
+    "difficulty": "easy",
+    "explanation": "WhatsApp Web lanzado en 2015 tenía el diseño característico de dos columnas con fondo verde."
+  },
+  {
+    "id": "ui-015",
+    "imageUrl": "/assets/ui-screenshots/dropbox-2013.svg",
+    "app": "Dropbox",
+    "action": "Explorador de archivos",
+    "year": 2013,
+    "difficulty": "medium",
+    "explanation": "Dropbox en 2013 tenía una interfaz web simple con iconos de carpetas azules y lista de archivos básica."
+  },
+  {
+    "id": "ui-016",
+    "imageUrl": "/assets/ui-screenshots/pinterest-2011.svg",
+    "app": "Pinterest",
+    "action": "Tablero de pins",
+    "year": 2011,
+    "difficulty": "medium",
+    "explanation": "Pinterest lanzado en 2010, en 2011 popularizó el diseño masonry con columnas de diferentes alturas."
+  }
+]

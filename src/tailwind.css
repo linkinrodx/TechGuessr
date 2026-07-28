@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Colores semánticos (Requirement 2.1, 2.2) */
+  --color-background: #121212;
+  --color-surface: #1e1e1e;
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #888888;
+  --color-accent: #4f46e5;
+  --color-success: #22c55e;
+  --color-error: #e53e3e;
+  --color-border: #333333;
+  --color-border-subtle: #444444;
+
+  /* Tipografía monoespaciada (Requirement 2.4, 4.1) */
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', 'Cascadia Code',
+    'Roboto Mono', Consolas, 'Liberation Mono', monospace;
+
+  /* Espaciado (Requirement 2.5) */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+}

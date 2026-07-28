@@ -1,0 +1,117 @@
+<main class="game-page">
+  <header class="game-header">
+    <h1>CommitGuessr</h1>
+    <div class="stats">
+      <span>Ronda {{ displayRoundIndex() }} / 10</span>
+      <span>Puntaje: {{ commitGame.totalScore() }}</span>
+    </div>
+  </header>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (isLoading()) {
+    <p class="loading">Cargando...</p>
+  } @else if (lastResult()) {
+    <section class="result-card">
+      <h2>{{ animatedRoundScore() }} puntos esta ronda</h2>
+
+      <ul class="correctness-list">
+        <li [class.correct]="lastResult()!.Correctness.CommitType" [class.incorrect]="!lastResult()!.Correctness.CommitType">
+          Tipo de cambio: {{ getCommitTypeLabel(lastResult()!.CorrectAnswers.CommitType) }}
+          {{ lastResult()!.Correctness.CommitType ? '✅' : '❌' }}
+        </li>
+        @if (lastResult()!.Correctness.Message !== null) {
+          <li [class.correct]="lastResult()!.Correctness.Message" [class.incorrect]="!lastResult()!.Correctness.Message">
+            Mensaje: {{ lastResult()!.CorrectAnswers.Message }}
+            {{ lastResult()!.Correctness.Message ? '✅' : '❌' }}
+          </li>
+        }
+        @if (lastResult()!.Correctness.EffortEstimate !== null) {
+          <li [class.correct]="lastResult()!.Correctness.EffortEstimate" [class.incorrect]="!lastResult()!.Correctness.EffortEstimate">
+            Esfuerzo: {{ lastResult()!.CorrectAnswers.EffortMinutes }} minutos
+            {{ lastResult()!.Correctness.EffortEstimate ? '✅' : '❌' }}
+          </li>
+        }
+        @if (lastResult()!.Correctness.FilesModified !== null) {
+          <li [class.correct]="lastResult()!.Correctness.FilesModified" [class.incorrect]="!lastResult()!.Correctness.FilesModified">
+            Archivos modificados: {{ lastResult()!.CorrectAnswers.FilesModified }}
+            {{ lastResult()!.Correctness.FilesModified ? '✅' : '❌' }}
+          </li>
+        }
+      </ul>
+
+      <p class="explanation">{{ lastResult()!.Explanation }}</p>
+
+      <button type="button" #nextRoundButton (click)="nextRoundOrFinish()" [disabled]="isLoading()">
+        {{ commitGame.sessionStatus() === 'finished' ? 'Ver resumen' : 'Siguiente ronda' }}
+      </button>
+    </section>
+  } @else if (commitGame.currentRound()) {
+    <section class="diff-card" [class.entering]="diffEntering()">
+      <pre><code [appHighlightCode]="commitGame.currentRound()!.Diff" [language]="'diff'"></code></pre>
+      <span class="difficulty">Dificultad: {{ commitGame.currentRound()!.Difficulty }}</span>
+    </section>
+
+    <form (ngSubmit)="submitAnswer()" class="guess-form">
+      <fieldset class="commit-type-field">
+        <legend>Tipo de cambio</legend>
+        <div class="commit-type-buttons">
+          @for (type of commitTypes; track type) {
+            <button
+              type="button"
+              [class.selected]="commitTypeGuess() === type"
+              (click)="selectCommitType(type)"
+            >
+              {{ getCommitTypeLabel(type) }}
+            </button>
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="message-field">
+        <legend>Mensaje de commit (opcional)</legend>
+        <div class="message-options">
+          @for (message of commitGame.currentRound()!.MessageOptions; track message) {
+            <button
+              type="button"
+              [class.selected]="messageGuess() === message"
+              (click)="selectMessage(message)"
+            >
+              {{ message }}
+            </button>
+          }
+        </div>
+      </fieldset>
+
+      <label class="number-field">
+        Estimación de esfuerzo (minutos, opcional)
+        <input
+          type="number"
+          name="effort"
+          [ngModel]="effortGuess()"
+          (ngModelChange)="effortGuess.set($event)"
+          placeholder="ej. 20"
+          min="1"
+          max="999"
+        />
+      </label>
+
+      <label class="number-field">
+        Archivos modificados (opcional)
+        <input
+          type="number"
+          name="files"
+          [ngModel]="filesGuess()"
+          (ngModelChange)="filesGuess.set($event)"
+          placeholder="ej. 3"
+          min="1"
+          max="100"
+        />
+      </label>
+
+      <button type="submit" [disabled]="!canSubmit()">Responder</button>
+    </form>
+  }
+</main>

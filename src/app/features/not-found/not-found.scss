@@ -1,0 +1,42 @@
+.not-found-page {
+  max-width: 480px;
+  margin: 5rem auto;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  text-align: center;
+}
+
+.code {
+  font-family: var(--font-mono);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin: 0;
+  line-height: 1;
+}
+
+h1 {
+  color: var(--color-text-primary);
+  font-size: 1.4rem;
+  margin: var(--spacing-md) 0 var(--spacing-sm);
+}
+
+.tagline {
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--spacing-lg);
+}
+
+.home-link {
+  display: inline-block;
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 600;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}

@@ -25,7 +25,7 @@ export class Login {
 
     try {
       await this.authService.login(this.username, this.password);
-      await this.router.navigateByUrl('/play');
+      await this.router.navigateByUrl('/');
     } catch (err) {
       this.errorMessage.set(err instanceof Error ? err.message : 'No se pudo iniciar sesión.');
     } finally {

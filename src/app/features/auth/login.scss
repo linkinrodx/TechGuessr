@@ -1,42 +1,42 @@
 .auth-page {
   max-width: 360px;
   margin: 4rem auto;
-  padding: 2rem;
-  border: 1px solid #333;
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   text-align: center;
 }
 
 .subtitle {
-  color: #888;
-  margin-bottom: 1.5rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-lg);
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--spacing-md);
   text-align: left;
 }
 
 label {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--spacing-xs);
   font-size: 0.9rem;
 }
 
 input {
-  padding: 0.5rem;
+  padding: var(--spacing-sm);
   border-radius: 4px;
-  border: 1px solid #444;
+  border: 1px solid var(--color-border-subtle);
 }
 
 button {
   padding: 0.6rem;
   border-radius: 4px;
   border: none;
-  background: #4f46e5;
+  background: var(--color-accent);
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -48,12 +48,12 @@ button {
 }
 
 .error {
-  color: #e53e3e;
+  color: var(--color-error);
   font-size: 0.85rem;
   margin: 0;
 }
 
 .switch-link {
-  margin-top: 1.5rem;
+  margin-top: var(--spacing-lg);
   font-size: 0.85rem;
 }

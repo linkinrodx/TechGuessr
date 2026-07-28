@@ -1,0 +1,70 @@
+<div class="mascot" [class]="'mood-' + mascot.mood()">
+  @if (mascot.message()) {
+    <div class="mascot-bubble" [class.dismissing]="mascot.isDismissing()" role="status">
+      <span>{{ mascot.message() }}</span>
+      <button
+        type="button"
+        class="mascot-bubble-close"
+        (click)="dismissMessage()"
+        aria-label="Cerrar mensaje"
+      >×</button>
+    </div>
+  }
+
+  <svg class="mascot-body" viewBox="0 0 100 100" width="76" height="76" aria-hidden="true">
+    <ellipse class="body-shadow" cx="50" cy="93" rx="24" ry="4" />
+
+    <!-- Celebrando: chispas alrededor de la cabeza -->
+    <g class="sparkles">
+      <path class="sparkle" d="M 15 25 L 18 32 L 25 35 L 18 38 L 15 45 L 12 38 L 5 35 L 12 32 Z" />
+      <path class="sparkle" d="M 85 20 L 87 25 L 92 27 L 87 29 L 85 34 L 83 29 L 78 27 L 83 25 Z" />
+    </g>
+
+    <!-- Orejas caídas de perrito -->
+    <path class="ear ear-left" d="M 26 42 Q 8 48 12 68 Q 16 78 30 70 Z" />
+    <path class="ear ear-right" d="M 74 42 Q 92 48 88 68 Q 84 78 70 70 Z" />
+
+    <!-- Cabeza -->
+    <ellipse class="head" cx="50" cy="52" rx="27" ry="25" />
+
+    <!-- Hocico -->
+    <ellipse class="snout" cx="50" cy="63" rx="14" ry="10" />
+    <ellipse class="nose" cx="50" cy="57" rx="4.5" ry="3.5" />
+
+    <!-- Cejas (solo visibles pensando) -->
+    <path class="eyebrow eyebrow-left" d="M 32 36 L 41 39" />
+    <path class="eyebrow eyebrow-right" d="M 68 36 L 59 39" />
+
+    <!-- Lentes de programador -->
+    <g class="glasses">
+      <rect x="30" y="42" width="16" height="12" rx="4" />
+      <rect x="54" y="42" width="16" height="12" rx="4" />
+      <line x1="46" y1="47" x2="54" y2="47" />
+      <line x1="30" y1="47" x2="22" y2="44" />
+      <line x1="70" y1="47" x2="78" y2="44" />
+    </g>
+
+    <!-- Ojos -->
+    <circle class="eye" cx="38" cy="48" r="3" />
+    <circle class="eye" cx="62" cy="48" r="3" />
+
+    <!-- Lagrimas (solo mood sad) -->
+    <path class="tear" d="M 33 54 Q 31 59 33 62 Q 35 59 33 54 Z" />
+    <path class="tear" d="M 67 54 Q 65 59 67 62 Q 69 59 67 54 Z" />
+
+    <!-- Boca por mood -->
+    <path class="mouth mouth-idle" d="M 44 66 Q 50 69 56 66" />
+    <path class="mouth mouth-thinking" d="M 45 67 L 55 67" />
+    <path class="mouth mouth-sad" d="M 44 70 Q 50 65 56 70" />
+
+    <!-- Boca feliz + lengua afuera -->
+    <g class="mouth mouth-happy">
+      <path d="M 42 65 Q 50 74 58 65" />
+      <path class="tongue" d="M 47 68 Q 50 76 53 68 Z" />
+    </g>
+
+    <!-- Collar con placa (guiño a "tech") -->
+    <path class="collar" d="M 30 73 Q 50 80 70 73" />
+    <rect class="collar-tag" x="46" y="76" width="8" height="6" rx="1.5" />
+  </svg>
+</div>

@@ -142,5 +142,59 @@
     "project": null,
     "difficulty": "easy",
     "explanation": "express(), app.use(express.json()) y el patrón (req, res) son la firma clásica de Express, el framework HTTP minimalista más popular del ecosistema Node.js."
+  },
+  {
+    "snippetId": "snip-017",
+    "code": "package main\n\nimport \"github.com/gin-gonic/gin\"\n\nfunc main() {\n\tr := gin.Default()\n\tr.GET(\"/ping\", func(c *gin.Context) {\n\t\tc.JSON(200, gin.H{\"message\": \"pong\"})\n\t})\n\tr.Run()\n}",
+    "language": "Go",
+    "framework": "Gin",
+    "project": "Gin",
+    "difficulty": "medium",
+    "explanation": "gin.Default(), *gin.Context y gin.H (un alias de map[string]interface{}) son parte del framework web Gin, uno de los más usados en Go por su bajo overhead frente a la librería estándar net/http."
+  },
+  {
+    "snippetId": "snip-018",
+    "code": "@Entity\n@Table(name = \"products\")\npublic class Product {\n\n    @Id\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\n    private Long id;\n\n    @Column(nullable = false)\n    private String name;\n}",
+    "language": "Java",
+    "framework": "Hibernate",
+    "project": "Hibernate",
+    "difficulty": "medium",
+    "explanation": "Las anotaciones @Entity, @Table, @Id y @GeneratedValue son parte de JPA/Hibernate, el ORM estándar del ecosistema Java para mapear clases a tablas relacionales."
+  },
+  {
+    "snippetId": "snip-019",
+    "code": "interface Props {\n  title: string;\n  onClose: () => void;\n}\n\nexport function Modal({ title, onClose }: Props) {\n  return (\n    <div className=\"modal\">\n      <h2>{title}</h2>\n      <button onClick={onClose}>Cerrar</button>\n    </div>\n  );\n}",
+    "language": "TypeScript",
+    "framework": "React",
+    "project": "React",
+    "difficulty": "easy",
+    "explanation": "La sintaxis JSX con className, el tipado de Props como interface y un componente función que retorna markup son característicos de React con TypeScript, a diferencia del snip-002 que mostraba código interno del propio motor de React."
+  },
+  {
+    "snippetId": "snip-020",
+    "code": "def fibonacci(n, memo={}):\n    if n in memo:\n        return memo[n]\n    if n <= 1:\n        return n\n    memo[n] = fibonacci(n - 1, memo) + fibonacci(n - 2, memo)\n    return memo[n]",
+    "language": "Python",
+    "framework": null,
+    "project": null,
+    "difficulty": "medium",
+    "explanation": "Implementación de Fibonacci con memoización usando un diccionario como caché, en Python puro (sin ningún framework). El uso de un valor por defecto mutable (memo={}) es un patrón reconocible del lenguaje, aunque considerado un anti-patrón en producción."
+  },
+  {
+    "snippetId": "snip-021",
+    "code": "public class BankAccount\n{\n    private decimal _balance;\n\n    public void Deposit(decimal amount)\n    {\n        if (amount <= 0)\n            throw new ArgumentException(\"El monto debe ser positivo\");\n        _balance += amount;\n    }\n}",
+    "language": "C#",
+    "framework": null,
+    "project": null,
+    "difficulty": "easy",
+    "explanation": "C# puro sin ningún framework: el tipo decimal (preferido sobre float/double para cálculos monetarios) y ArgumentException son parte del BCL (Base Class Library) de .NET, no de ASP.NET Core como en el snip-008."
+  },
+  {
+    "snippetId": "snip-022",
+    "code": "@Composable\nfun GreetingCard(name: String) {\n    Card(modifier = Modifier.padding(16.dp)) {\n        Text(text = \"Hola, $name\", style = MaterialTheme.typography.h5)\n    }\n}",
+    "language": "Kotlin",
+    "framework": "Jetpack Compose",
+    "project": "Jetpack Compose",
+    "difficulty": "hard",
+    "explanation": "El decorador @Composable, Modifier y MaterialTheme son exclusivos de Jetpack Compose, el toolkit declarativo de UI de Android que reemplazó gradualmente al sistema de Views/XML tradicional."
   }
 ]

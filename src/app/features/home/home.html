@@ -1,0 +1,86 @@
+<main class="home-page">
+  <section class="hero">
+    <div class="hero-title">
+      <img src="favicon.svg" alt="" width="50" height="50" />
+      <h1>TechGuessr</h1>
+    </div>
+    <p class="tagline">
+      El juego de adivinanzas para gente de tech. Código, commits,
+      interfaces y contenido generado por IA: suma puntos por precisión
+      y velocidad en cada modalidad.
+    </p>
+  </section>
+
+  <section class="game-list">
+    <h2>Modos de juego</h2>
+    <div class="game-grid">
+
+      <button type="button" class="game-card game-card--available" (click)="onPlayUIguessr()">
+        <div class="card-header">
+          <app-game-icon name="ui" />
+          <h3>UIGuessr</h3>
+          <span class="badge-new">Nuevo</span>
+        </div>
+        <p>Identifica apps y sitios web a partir de screenshots de interfaces sin branding visible.</p>
+      </button>
+
+      <button type="button" class="game-card game-card--available" (click)="onPlayCodeguessr(true)">
+        <div class="card-header">
+          <app-game-icon name="code" />
+          <h3>CodeGuessr</h3>
+          <span class="badge-new">Nuevo</span>
+        </div>
+        <p>Clásico de 10 rondas: adivina lenguaje, framework y proyecto a partir de un snippet de código real.</p>
+      </button>
+
+      <button type="button" class="game-card game-card--available" (click)="onPlayAIguessr()">
+        <div class="card-header">
+          <app-game-icon name="ai" />
+          <h3>AIGuessr</h3>
+        </div>
+        <p>¿Human or AI? Detecta alucinaciones y distingue contenido humano de contenido generado por IA.</p>
+      </button>
+
+      <button type="button" class="game-card game-card--available" (click)="onPlayCommitguessr()">
+        <div class="card-header">
+          <app-game-icon name="commit" />
+          <h3>CommitGuessr</h3>
+        </div>
+        <p>Lee un diff anonimizado y adivina el tipo de cambio, el mensaje de commit y el esfuerzo estimado.</p>
+      </button>
+
+      <button type="button" class="game-card game-card--soon" (click)="onPlayCodeguessr(false)">
+        <div class="card-header">
+          <app-game-icon name="stack" />
+          <h3>StackGuessr</h3>
+          <span class="badge-soon">Próximamente</span>
+        </div>
+        <p>Diagnostica stack traces y errores reales: adivina el lenguaje, la causa raíz y la solución correcta.</p>
+      </button>
+
+      <button type="button" class="game-card game-card--soon" (click)="onPlayCodeguessr(false)">
+        <div class="card-header">
+          <app-game-icon name="terminal" />
+          <h3>TerminalGuessr</h3>
+          <span class="badge-soon">Próximamente</span>
+        </div>
+        <p>Adivina el comando, el sistema operativo y la herramienta a partir del output de una terminal.</p>
+      </button>
+
+    </div>
+  </section>
+
+  <nav class="secondary-links">
+    <a routerLink="/leaderboards">Ver todos los leaderboards</a>
+    @if (!currentUser()) {
+      <a routerLink="/login">Iniciar sesión para guardar tu progreso</a>
+    }
+  </nav>
+
+  <footer class="home-footer">
+    <p>&copy; {{ currentYear }} TechGuessr. Todos los derechos reservados.</p>
+    <div class="social-links">
+      <a href="https://github.com/linkinrodx/TechGuessr" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+</main>

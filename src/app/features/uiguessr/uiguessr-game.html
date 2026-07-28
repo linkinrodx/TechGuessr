@@ -1,0 +1,136 @@
+<main class="game-page">
+  <header class="game-header">
+    <h1>UIGuessr</h1>
+    <div class="stats">
+      <span>Ronda {{ displayedRoundNumber() }} / 10</span>
+      <span>Puntaje: {{ game.totalScore() }}</span>
+    </div>
+  </header>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (isLoading()) {
+    <p class="loading">Cargando...</p>
+  } @else if (lastResult()) {
+    <section class="result-card">
+      <h2>{{ animatedRoundScore() }} puntos esta ronda</h2>
+
+      <ul class="correctness-list">
+        <li [class.correct]="lastResult()!.Correctness.App" [class.incorrect]="!lastResult()!.Correctness.App">
+          App: {{ lastResult()!.CorrectAnswers.App }}
+          {{ lastResult()!.Correctness.App ? '✅' : '❌' }}
+        </li>
+        @if (lastResult()!.Correctness.Action !== null) {
+          <li [class.correct]="lastResult()!.Correctness.Action" [class.incorrect]="!lastResult()!.Correctness.Action">
+            Acción: {{ lastResult()!.CorrectAnswers.Action }}
+            {{ lastResult()!.Correctness.Action ? '✅' : '❌' }}
+          </li>
+        }
+        @if (lastResult()!.Correctness.Year !== null) {
+          <li [class.correct]="lastResult()!.Correctness.Year" [class.incorrect]="!lastResult()!.Correctness.Year">
+            Año: {{ lastResult()!.CorrectAnswers.Year }}
+            {{ lastResult()!.Correctness.Year ? '✅' : '❌' }}
+            <span class="year-diff">({{ formatYearDiff(lastResult()!.Correctness.YearDiff) }})</span>
+          </li>
+        }
+      </ul>
+
+      <p class="explanation">{{ lastResult()!.Explanation }}</p>
+
+      <button type="button" #nextRoundButton (click)="nextRoundOrFinish()" [disabled]="isLoading()">
+        {{ game.sessionStatus() === 'finished' ? 'Ver resumen' : 'Siguiente ronda' }}
+      </button>
+    </section>
+  } @else if (game.currentRound()) {
+    <section class="screenshot-card" [class.entering]="imageEntering()">
+      <div class="screenshot-container">
+        <img
+          [src]="game.currentRound()!.ImageUrl"
+          [alt]="'Screenshot de interfaz UI ronda ' + displayedRoundNumber()"
+          class="ui-screenshot"
+        />
+      </div>
+      <span class="difficulty">Dificultad: {{ game.currentRound()!.Difficulty }}</span>
+    </section>
+
+    <form (ngSubmit)="submitAnswer()" class="guess-form">
+      <label class="autocomplete-field">
+        ¿Qué app/sitio web es?
+        <input
+          #appInput
+          type="text"
+          name="app"
+          [ngModel]="appGuess()"
+          (ngModelChange)="appGuess.set($event)"
+          placeholder="ej. Twitter"
+          autocomplete="off"
+          required
+          (focus)="onSuggestionsFocus('app')"
+          (blur)="onSuggestionsBlur()"
+          (keydown)="onSuggestionsKeydown($event, 'app', appSuggestions())"
+        />
+        @if (appSuggestions().length > 0) {
+          <ul class="suggestions-list">
+            @for (option of appSuggestions(); track option; let i = $index) {
+              <li>
+                <button
+                  type="button"
+                  [class.active]="i === activeSuggestionIndex()"
+                  (mousedown)="selectSuggestion('app', option)"
+                >{{ option }}</button>
+              </li>
+            }
+          </ul>
+        }
+      </label>
+
+      <label class="autocomplete-field">
+        ¿Qué acción estaba realizando el usuario? (opcional)
+        <input
+          #actionInput
+          type="text"
+          name="action"
+          [ngModel]="actionGuess()"
+          (ngModelChange)="actionGuess.set($event)"
+          placeholder="ej. Timeline principal"
+          autocomplete="off"
+          (focus)="onSuggestionsFocus('action')"
+          (blur)="onSuggestionsBlur()"
+          (keydown)="onSuggestionsKeydown($event, 'action', actionSuggestions())"
+        />
+        @if (actionSuggestions().length > 0) {
+          <ul class="suggestions-list">
+            @for (option of actionSuggestions(); track option; let i = $index) {
+              <li>
+                <button
+                  type="button"
+                  [class.active]="i === activeSuggestionIndex()"
+                  (mousedown)="selectSuggestion('action', option)"
+                >{{ option }}</button>
+              </li>
+            }
+          </ul>
+        }
+      </label>
+
+      <label class="number-field">
+        ¿De qué año aproximado es esta UI? (opcional)
+        <input
+          #yearInput
+          type="number"
+          name="year"
+          [ngModel]="yearGuess()"
+          (ngModelChange)="yearGuess.set($event === null ? undefined : $event)"
+          placeholder="ej. 2010"
+          min="2000"
+          max="2026"
+          autocomplete="off"
+        />
+      </label>
+
+      <button type="submit" [disabled]="isLoading()">Responder</button>
+    </form>
+  }
+</main>

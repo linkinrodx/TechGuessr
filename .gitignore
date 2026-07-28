@@ -44,6 +44,15 @@ __screenshots__/
 .env.local
 .env.*.local
 
+# Playwright MCP (logs de testing local)
+.playwright-mcp/
+
+# Screenshots temporales de debugging (raíz del proyecto)
+/*.png
+
+# Logs de build
+tsc-build.log
+
 # System files
 .DS_Store
 Thumbs.db

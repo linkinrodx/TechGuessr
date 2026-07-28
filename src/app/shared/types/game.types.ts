@@ -78,3 +78,194 @@ export interface LeaderboardEntryResponse {
 }
 
 export type SessionStatus = 'idle' | 'playing' | 'finished';
+
+// ============================================================================
+// CommitGuessr Types
+// ============================================================================
+
+export type CommitType = 'feature' | 'bugfix' | 'refactor' | 'docs' | 'test' | 'perf';
+
+export interface CommitSnippet {
+  commitId: string;
+  diff: string;
+  commitType: CommitType;
+  correctMessage: string;
+  messageOptions: string[]; // 4 opciones incluyendo la correcta
+  effortMinutes: number;
+  filesModified: number;
+  difficulty: 'easy' | 'medium' | 'hard';
+  explanation: string;
+}
+
+export interface CommitGuessRequest {
+  commitType?: CommitType;
+  message?: string;
+  effortMinutes?: number;
+  filesModified?: number;
+}
+
+export interface CommitAnswerSubmissionRequest {
+  sessionId: string;
+  guess: CommitGuessRequest;
+  clientElapsedMs: number;
+}
+
+export interface CommitCorrectnessResponse {
+  CommitType: boolean;
+  Message: boolean | null;
+  EffortEstimate: boolean | null;
+  FilesModified: boolean | null;
+}
+
+export interface CommitCorrectAnswersResponse {
+  CommitType: CommitType;
+  Message: string;
+  EffortMinutes: number;
+  FilesModified: number;
+}
+
+export interface CommitAnswerResultResponse {
+  Correctness: CommitCorrectnessResponse;
+  CorrectAnswers: CommitCorrectAnswersResponse;
+  Explanation: string;
+  RoundScore: number;
+  TotalScoreSoFar: number;
+  SessionFinished: boolean;
+}
+
+export interface CommitRoundResponse {
+  RoundId: string;
+  RoundIndex: number;
+  Diff: string;
+  MessageOptions: string[];
+  Difficulty: 'easy' | 'medium' | 'hard';
+}
+
+export interface CommitRoundSummaryResponse {
+  RoundId: string;
+  RoundIndex: number;
+  Correctness: CommitCorrectnessResponse | null;
+  Score: number;
+}
+
+export interface CommitSessionSummaryResponse {
+  SessionId: string;
+  TotalScore: number;
+  Rounds: CommitRoundSummaryResponse[];
+  Rank: number | null;
+}
+
+// ============================================================================
+// UIGuessr Types
+// ============================================================================
+
+export interface UIRoundResponse {
+  RoundId: string;
+  RoundIndex: number;
+  ImageUrl: string;
+  Difficulty: 'easy' | 'medium' | 'hard';
+}
+
+export interface UIGuessRequest {
+  app?: string;
+  action?: string;
+  year?: number;
+}
+
+export interface UICorrectnessResponse {
+  App: boolean;
+  Action: boolean | null;
+  Year: boolean | null;
+  YearDiff: number;
+}
+
+export interface UICorrectAnswersResponse {
+  App: string;
+  Action: string;
+  Year: number;
+}
+
+export interface UIAnswerResultResponse {
+  Correctness: UICorrectnessResponse;
+  CorrectAnswers: UICorrectAnswersResponse;
+  Explanation: string;
+  RoundScore: number;
+  TotalScoreSoFar: number;
+  SessionFinished: boolean;
+}
+
+export interface UIRoundSummaryResponse {
+  RoundId: string;
+  RoundIndex: number;
+  Correctness: UICorrectnessResponse | null;
+  Score: number;
+}
+
+export interface UISessionSummaryResponse {
+  SessionId: string;
+  TotalScore: number;
+  Rounds: UIRoundSummaryResponse[];
+  Rank: number | null;
+}
+
+// ============================================================================
+// AIGuessr Types
+// ============================================================================
+
+export type AIGameMode = 'human-or-ai' | 'hallucination-hunter';
+
+export interface AIRoundResponse {
+  RoundId: string;
+  RoundIndex: number;
+  Mode: AIGameMode;
+  Content: string | string[]; // string para human-or-ai, string[] para hallucination-hunter
+  Difficulty: 'easy' | 'medium' | 'hard';
+}
+
+export interface AIGuessRequest {
+  mode: AIGameMode;
+  isHuman?: boolean; // para human-or-ai
+  hallucinationIndices?: number[]; // para hallucination-hunter: índices de afirmaciones marcadas como alucinaciones
+}
+
+export interface AICorrectnessResponse {
+  IsCorrect: boolean;
+  Details?: {
+    // Para human-or-ai
+    GuessedCorrectly?: boolean;
+    // Para hallucination-hunter
+    CorrectlyIdentified?: number;
+    FalsePositives?: number;
+    Missed?: number;
+  };
+}
+
+export interface AICorrectAnswersResponse {
+  Mode: AIGameMode;
+  IsHuman?: boolean; // para human-or-ai
+  HallucinationIndices?: number[]; // para hallucination-hunter
+  Explanation: string;
+}
+
+export interface AIAnswerResultResponse {
+  Correctness: AICorrectnessResponse;
+  CorrectAnswers: AICorrectAnswersResponse;
+  Explanation: string;
+  RoundScore: number;
+  TotalScoreSoFar: number;
+  SessionFinished: boolean;
+}
+
+export interface AIRoundSummaryResponse {
+  RoundId: string;
+  RoundIndex: number;
+  Correctness: AICorrectnessResponse | null;
+  Score: number;
+}
+
+export interface AISessionSummaryResponse {
+  SessionId: string;
+  TotalScore: number;
+  Rounds: AIRoundSummaryResponse[];
+  Rank: number | null;
+}

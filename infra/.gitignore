@@ -12,3 +12,6 @@ obj/
 
 # Archivos temporales usados en pruebas manuales de integración (ver README)
 .tmp-*
+
+# Logs de compilación TypeScript
+tsc-build.log
